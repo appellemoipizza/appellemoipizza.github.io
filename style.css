@@ -1,0 +1,200 @@
+/* ピザって呼んで — visit card */
+
+body { margin: 0; }
+
+@media (pointer: fine) {
+  body, a { cursor: none; }
+}
+
+@keyframes drift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 140px 140px, 0 0; }
+}
+
+.desk {
+  min-height: 100vh;
+  background-color: #E9EAE8;
+  background-image:
+    radial-gradient(circle, rgba(35, 36, 35, 0.11) 1px, transparent 1px),
+    linear-gradient(180deg, #F7F8F6 0%, #E2E3E0 100%);
+  background-size: 7px 7px, 100% 100%;
+  animation: drift 18s linear infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px 24px 64px;
+  box-sizing: border-box;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #232423;
+  position: relative;
+}
+
+/* dark variant when the card lands on its back — colors inverted by script */
+.desk.flipped {
+  background-image:
+    radial-gradient(circle, rgba(35, 36, 35, 0.11) 1px, transparent 1px),
+    linear-gradient(180deg, #F4F5F3 0%, #F0F1EF 100%);
+}
+body.flipped { filter: invert(1); }
+
+.card-scene {
+  width: 880px;
+  max-width: 100%;
+  perspective: 1600px;
+}
+
+.card {
+  position: relative;
+  background: #FBFCFA;
+  border: 1px solid #232423;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+}
+
+/* thickness slabs + glare are injected by script.js */
+
+.card-face {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  height: 560px;
+}
+
+.card-left {
+  padding: 48px 44px 44px;
+  display: flex;
+  flex-direction: column;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.avatar {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  flex: none;
+  display: block;
+}
+.avatar img {
+  width: 72px;
+  height: 72px;
+  border: 1px solid #232423;
+  image-rendering: pixelated;
+  display: block;
+}
+.avatar .swap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.avatar:hover .swap { opacity: 1; }
+
+.identity-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.identity-text h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.subtitle {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #75766F;
+}
+
+.bio {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+}
+.bio p {
+  margin: 0;
+  padding: 16px 0;
+  border-top: 1px solid #E0E1DE;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #4F504C;
+}
+.bio p + p { padding-bottom: 0; }
+
+.links {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 48px;
+}
+.links a {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #232423;
+  background: #FBFCFA;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.links a:hover {
+  background: #4B4D49;
+  border-color: #4B4D49;
+}
+.links img {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  display: block;
+}
+.links .swap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.links a:hover .swap { opacity: 1; }
+
+.card-photo {
+  border-left: 1px solid #232423;
+  position: relative;
+  overflow: hidden;
+}
+.card-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+.card-photo .swap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.card-photo:hover .swap { opacity: 1; }
+
+.footer {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #92938E;
+}
