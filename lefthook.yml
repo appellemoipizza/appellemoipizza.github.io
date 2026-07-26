@@ -1,0 +1,7 @@
+# https://github.com/evilmartians/lefthook
+# Install once per clone:  lefthook install
+
+commit-msg:
+  commands:
+    conventional-commits:
+      run: ./scripts/check-commit-msg.sh {1}
