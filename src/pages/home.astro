@@ -1,59 +1,257 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import NoteRow from '../components/NoteRow.astro';
 
-const projects = (await getCollection('projects')).filter((p) => p.data.featured).sort((a,b) => a.data.order - b.data.order);
-const notes = (await getCollection('notes')).filter((n) => !n.data.draft).sort((a,b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 4);
+const notes = (await getCollection('notes'))
+  .filter((note) => !note.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const featured = notes.find((note) => note.data.featured) ?? notes[0];
+const rest = notes.filter((note) => note.id !== featured?.id);
+const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 ---
-<BaseLayout>
-  <div class="shell">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">Independent software designer · AI systems builder</div>
-        <h1>I make software, AI systems, and small experiments.</h1>
-        <p class="hero-lede">I build around privacy, evidence, control, and the idea that useful software should know when to get out of the way.</p>
-        <div class="hero-bottom">
-          <div class="currently">
-            <div><span>NOW / 01</span>building Millie, my operating intelligence</div>
-            <div><span>NOW / 02</span>building Wakomi for life in Japan</div>
-            <div><span>NOW / 03</span>testing what local AI is actually good for</div>
-          </div>
-          <div class="meta">Brussels · mostly at night</div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#f4f2ec" />
+    <meta name="description" content="Notes, build logs, films and things Thomas is figuring out while making software and AI systems." />
+    <link rel="alternate" type="application/rss+xml" title="Thomas Vezzani" href="/rss.xml" />
+    <title>Thomas — journal</title>
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="rail">
+        <a class="identity" href="/" aria-label="Back to the visit card">
+          <span class="jp">ピザって呼んで</span>
+          <span class="name">thomas</span>
+        </a>
+
+        <nav aria-label="Primary">
+          <a class="active" href="/home">Home</a>
+          <a href="/notes">Posts</a>
+          <a href="/work">Work</a>
+          <a href="/lab">Lab</a>
+          <a href="/about">About</a>
+        </nav>
+
+        <div class="rail-bottom">
+          <a href="https://github.com/appellemoipizza">GitHub ↗</a>
+          <a href="/rss.xml">RSS ↗</a>
         </div>
-      </div>
-      <div class="hero-image">
-        <img src="/assets/dither-reflection.png" alt="Tokyo through a window with Thomas reflected in the glass" />
-      </div>
-    </section>
+      </aside>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Selected work</h2>
-        <a class="section-link" href="/work">all work ↗</a>
-      </div>
-      <div class="project-grid">
-        {projects.map((project) => <ProjectCard project={project} />)}
-      </div>
-    </section>
+      <main>
+        <header class="intro">
+          <div class="eyebrow">PERSONAL / JOURNAL</div>
+          <h1>Things I’m making,<br />testing and thinking about.</h1>
+          <p>Notes on software, AI systems, running a small studio, design, experiments, and whatever becomes worth writing down.</p>
+        </header>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Notes & films</h2>
-        <a class="section-link" href="/notes">archive ↗</a>
-      </div>
-      <div class="note-list">
-        {notes.map((note) => <NoteRow note={note} />)}
-      </div>
-    </section>
+        {featured && (
+          <section class="featured-section" aria-labelledby="latest-heading">
+            <div class="section-heading">
+              <span id="latest-heading">Latest</span>
+              <a href="/notes">All posts ↗</a>
+            </div>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Small things count too</h2>
-        <a class="section-link" href="/lab">enter the lab ↗</a>
-      </div>
-      <div class="filter-note">The Lab is where quack, product films, knowledge tools, weird interface experiments and things that may never become companies are allowed to exist without pretending to be bigger than they are.</div>
-    </section>
-  </div>
-</BaseLayout>
+            <a class="featured-card" href={`/notes/${featured.id}`}>
+              <div class="featured-copy">
+                <div class="post-meta">{formatDate(featured.data.date)} · {featured.data.kind}</div>
+                <h2>{featured.data.title}</h2>
+                <p>{featured.data.summary}</p>
+                <span class="read">Read post ↗</span>
+              </div>
+              <div class="featured-image">
+                <img src="/assets/dither-reflection.png" alt="Tokyo through a window with Thomas reflected in the glass" />
+              </div>
+            </a>
+          </section>
+        )}
+
+        <section class="posts-section" aria-labelledby="recent-heading">
+          <div class="section-heading">
+            <span id="recent-heading">Recent posts</span>
+            <span class="count">{String(rest.length).padStart(2, '0')}</span>
+          </div>
+
+          <div class="post-grid">
+            {rest.map((note, index) => (
+              <a class="post-card" href={`/notes/${note.id}`}>
+                <div class={`post-art art-${index % 3}`} aria-hidden="true">
+                  <span>{String(index + 2).padStart(2, '0')}</span>
+                </div>
+                <div class="post-body">
+                  <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
+                  <h2>{note.data.title}</h2>
+                  <p>{note.data.summary}</p>
+                  <span class="read">Read ↗</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section class="publish-note">
+          <div class="eyebrow">THIS SITE, FOR NOW</div>
+          <p>I don’t need a content universe yet. I need a place where I can publish consistently and let the visual language emerge from the work itself.</p>
+        </section>
+      </main>
+    </div>
+
+    <style>
+      :root {
+        --ink: #171717;
+        --muted: #77766f;
+        --paper: #fbfaf7;
+        --warm: #f4f2ec;
+        --line: #d8d5ce;
+        --blue: #2448ff;
+        --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+        --sans: "Helvetica Neue", Arial, system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { background: #111; }
+      body { margin: 0; font-family: var(--sans); color: var(--ink); background: #111; }
+      a { color: inherit; }
+      img { display: block; max-width: 100%; }
+
+      .page-shell {
+        width: min(1500px, calc(100% - 28px));
+        min-height: calc(100vh - 28px);
+        margin: 14px auto;
+        display: grid;
+        grid-template-columns: 210px minmax(0, 1fr);
+        overflow: hidden;
+        border-radius: 10px;
+        background: var(--paper);
+      }
+
+      .rail {
+        min-height: calc(100vh - 28px);
+        padding: 28px 24px;
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 14px;
+        align-self: start;
+      }
+
+      .identity { text-decoration: none; display: grid; gap: 3px; }
+      .identity .jp { font-size: 15px; font-weight: 650; letter-spacing: -.03em; }
+      .identity .name, .eyebrow, .post-meta, .count, .read, .rail nav a, .rail-bottom a, .section-heading {
+        font-family: var(--mono);
+      }
+      .identity .name { font-size: 10px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+
+      .rail nav { display: grid; gap: 5px; margin-top: 68px; }
+      .rail nav a {
+        font-size: 11px;
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 5px;
+        color: #55544f;
+      }
+      .rail nav a:hover, .rail nav a.active { color: var(--ink); background: #efede7; }
+      .rail nav a.active::before { content: "•"; margin-right: 8px; }
+
+      .rail-bottom { margin-top: auto; display: grid; gap: 8px; }
+      .rail-bottom a { font-size: 10px; color: var(--muted); text-decoration: none; }
+      .rail-bottom a:hover { color: var(--ink); }
+
+      main { padding: 56px clamp(28px, 5vw, 72px) 70px; min-width: 0; }
+      .intro { max-width: 980px; padding: 8px 0 60px; }
+      .eyebrow { font-size: 10px; line-height: 1.4; letter-spacing: .13em; color: var(--blue); text-transform: uppercase; }
+      .intro h1 {
+        margin: 16px 0 18px;
+        font-size: clamp(48px, 7vw, 92px);
+        line-height: .93;
+        letter-spacing: -.06em;
+        font-weight: 500;
+      }
+      .intro p { max-width: 680px; margin: 0; font-size: 17px; line-height: 1.5; color: #77756f; }
+
+      .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding-bottom: 11px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: #55544f;
+      }
+      .section-heading a { text-decoration: none; }
+      .section-heading a:hover { color: var(--blue); }
+      .count { color: var(--muted); }
+
+      .featured-card {
+        display: grid;
+        grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr);
+        min-height: 470px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        background: #fff;
+      }
+      .featured-copy { padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; }
+      .post-meta { font-size: 10px; line-height: 1.4; text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+      .featured-copy h2 { margin: 38px 0 16px; font-size: clamp(38px, 5vw, 68px); line-height: .96; letter-spacing: -.05em; font-weight: 500; }
+      .featured-copy p { max-width: 620px; margin: 0; color: #6d6c66; font-size: 15px; line-height: 1.55; }
+      .read { margin-top: auto; padding-top: 38px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+      .featured-image { min-height: 400px; overflow: hidden; background: #d8d8d2; }
+      .featured-image img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.05); transition: filter .3s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+      .featured-card:hover .featured-image img { filter: grayscale(0) contrast(1.05); transform: scale(1.015); }
+      .featured-card:hover .read { color: var(--blue); }
+
+      .posts-section { margin-top: 54px; }
+      .post-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .post-card { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; text-decoration: none; background: #fff; min-height: 420px; display: grid; grid-template-rows: 155px 1fr; }
+      .post-art { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); background-color: var(--warm); }
+      .post-art::before, .post-art::after { content: ""; position: absolute; border: 1px solid rgba(23,23,23,.18); border-radius: 50%; }
+      .post-art::before { width: 220px; height: 220px; right: -35px; top: -100px; }
+      .post-art::after { width: 120px; height: 120px; right: 105px; top: 24px; }
+      .post-art span { position: absolute; left: 18px; bottom: 15px; font: 11px var(--mono); color: var(--muted); }
+      .art-1 { background: #eceff9; }
+      .art-1::before { border-radius: 38% 62% 57% 43% / 50% 35% 65% 50%; transform: rotate(24deg); }
+      .art-2 { background: #eeeae2; }
+      .art-2::after { border-radius: 35% 65% 44% 56% / 63% 43% 57% 37%; }
+      .post-body { padding: 24px; display: flex; flex-direction: column; }
+      .post-body h2 { margin: 22px 0 12px; font-size: clamp(26px, 3vw, 40px); line-height: 1; letter-spacing: -.045em; font-weight: 500; }
+      .post-body p { margin: 0; font-size: 13px; line-height: 1.55; color: #6e6d67; }
+      .post-card:hover { border-color: #aaa79f; transform: translateY(-1px); }
+      .post-card:hover .read { color: var(--blue); }
+
+      .publish-note {
+        margin-top: 70px;
+        max-width: 760px;
+        border-top: 1px solid var(--line);
+        padding-top: 22px;
+      }
+      .publish-note p { margin: 12px 0 0; font-size: 18px; line-height: 1.55; letter-spacing: -.01em; color: #55544f; }
+
+      @media (max-width: 860px) {
+        .page-shell { width: 100%; min-height: 100vh; margin: 0; border-radius: 0; grid-template-columns: 1fr; }
+        .rail { min-height: auto; position: static; padding: 18px 20px; border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; align-items: center; gap: 20px; }
+        .rail nav { display: flex; flex-wrap: wrap; margin: 0 0 0 auto; gap: 3px; }
+        .rail-bottom { display: none; }
+        main { padding: 38px 20px 60px; }
+        .featured-card { grid-template-columns: 1fr; }
+        .featured-image { min-height: 330px; order: -1; }
+      }
+
+      @media (max-width: 620px) {
+        .rail { align-items: flex-start; flex-direction: column; }
+        .rail nav { margin-left: 0; }
+        .intro h1 { font-size: clamp(44px, 14vw, 68px); }
+        .post-grid { grid-template-columns: 1fr; }
+        .featured-copy h2 { font-size: 42px; }
+      }
+    </style>
+  </body>
+</html>
