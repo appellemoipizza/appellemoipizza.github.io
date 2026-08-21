@@ -5,84 +5,84 @@ import JournalLayout from '../layouts/JournalLayout.astro';
 const notes = (await getCollection('notes'))
   .filter((note) => !note.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const featured = notes.find((note) => note.data.featured) ?? notes[0];
-const rest = notes.filter((note) => note.id !== featured?.id);
+
+const featured = notes[0];
+const rest = notes.slice(1);
 const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-const featuredImage = featured?.data.image ?? '/assets/dither-reflection.png';
 ---
 <JournalLayout>
   <header class="intro">
-    <div class="eyebrow">PERSONAL / RESEARCH JOURNAL</div>
-    <h1>A quiet place to document what I’m working on.</h1>
-    <p>Research, build logs, experiments, useful hacks and things I’m excited enough about to explain properly.</p>
+    <div class="eyebrow">research journal</div>
+    <h1>Things I’m working on and thinking about.</h1>
+    <p>Research, build logs, experiments, useful hacks, and explanations of things I find interesting.</p>
   </header>
 
   {featured && (
-    <section aria-labelledby="latest-heading">
-      <div class="section-heading"><span id="latest-heading">Latest note</span></div>
-      <a class="featured-card" href={`/notes/${featured.id}`}>
-        <div class="featured-copy">
-          <div class="post-meta">{formatDate(featured.data.date)} · {featured.data.kind}</div>
-          <h2>{featured.data.title}</h2>
-          <p>{featured.data.summary}</p>
-          <span class="read">Read ↗</span>
-        </div>
-        <div class="featured-image"><img src={featuredImage} alt="" /></div>
-      </a>
-    </section>
+    <article class="latest">
+      {featured.data.image && (
+        <a class="latest-image" href={`/notes/${featured.id}`}>
+          <img src={featured.data.image} alt="" />
+        </a>
+      )}
+      <div class="latest-copy">
+        <div class="post-meta">{formatDate(featured.data.date)} · {featured.data.kind}</div>
+        <a href={`/notes/${featured.id}`}><h2>{featured.data.title}</h2></a>
+        <p>{featured.data.summary}</p>
+        <a class="read" href={`/notes/${featured.id}`}>read ↗</a>
+      </div>
+    </article>
   )}
 
   {rest.length > 0 && (
-    <section class="posts-section" aria-labelledby="more-heading">
-      <div class="section-heading"><span id="more-heading">Journal</span></div>
-      <div class="post-grid">
-        {rest.map((note) => (
-          <a class:list={['post-card', { 'has-image': Boolean(note.data.image) }]} href={`/notes/${note.id}`}>
-            {note.data.image && <div class="post-image"><img src={note.data.image} alt="" /></div>}
-            <div class="post-body">
-              <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
-              <h2>{note.data.title}</h2>
-              <p>{note.data.summary}</p>
-              <span class="read">Read ↗</span>
-            </div>
-          </a>
-        ))}
-      </div>
+    <section class="journal-list" aria-labelledby="journal-heading">
+      <div class="section-heading" id="journal-heading">journal</div>
+      {rest.map((note) => (
+        <article class="post-row">
+          {note.data.image && (
+            <a class="thumb" href={`/notes/${note.id}`}>
+              <img src={note.data.image} alt="" />
+            </a>
+          )}
+          <div class="post-copy">
+            <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
+            <a href={`/notes/${note.id}`}><h2>{note.data.title}</h2></a>
+            <p>{note.data.summary}</p>
+          </div>
+        </article>
+      ))}
     </section>
   )}
 </JournalLayout>
 
 <style>
-  .intro { max-width: 680px; padding: 2px 0 42px; }
-  .intro h1 { margin: 12px 0 12px; max-width: 640px; font-size: clamp(30px, 4vw, 46px); line-height: 1.04; letter-spacing: -.035em; font-weight: 520; }
-  .intro p { max-width: 590px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+  .intro { max-width: 600px; margin-bottom: 64px; }
+  .intro h1 { margin: 11px 0 10px; font-size: clamp(26px, 3.6vw, 38px); line-height: 1.08; letter-spacing: -.03em; font-weight: 560; }
+  .intro p { max-width: 560px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.58; }
 
-  .featured-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .9fr); min-height: 340px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; text-decoration: none; background: rgba(255,255,252,.58); }
-  .featured-copy { padding: clamp(24px, 3.4vw, 38px); display: flex; flex-direction: column; }
-  .featured-copy h2 { margin: 26px 0 11px; font-size: clamp(27px, 3.5vw, 42px); line-height: 1.03; letter-spacing: -.035em; font-weight: 520; }
-  .featured-copy p, .post-body p { margin: 0; color: #6f6f68; font-size: 12px; line-height: 1.55; }
-  .featured-copy .read { margin-top: auto; padding-top: 26px; }
+  .latest { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 34px; align-items: start; margin-bottom: 72px; }
+  .latest-image { display: block; overflow: hidden; text-decoration: none; }
+  .latest-image img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.02); transition: filter .2s ease; }
+  .latest-image:hover img { filter: grayscale(.25) contrast(1.02); }
+  .latest-copy { padding-top: 4px; }
+  .latest-copy a, .post-copy a { text-decoration: none; }
+  .latest-copy h2 { margin: 17px 0 10px; font-size: clamp(24px, 3vw, 34px); line-height: 1.08; letter-spacing: -.025em; font-weight: 560; }
+  .latest-copy p, .post-copy p { margin: 0; color: #77766f; font-size: 12px; line-height: 1.58; }
+  .latest-copy .read { display: inline-block; margin-top: 24px; }
 
-  .featured-image, .post-image { overflow: hidden; background: #deddd6; }
-  .featured-image img, .post-image img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.03); transition: filter .25s ease; }
-  .featured-card:hover img, .post-card:hover img { filter: grayscale(.2) contrast(1.03); }
+  .journal-list { margin-top: 8px; }
+  .post-row { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 24px; align-items: start; margin: 0 0 38px; }
+  .post-row:not(:has(.thumb)) { grid-template-columns: 1fr; }
+  .thumb { display: block; text-decoration: none; }
+  .thumb img { width: 112px; height: 78px; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.02); transition: filter .2s ease; }
+  .thumb:hover img { filter: grayscale(.25) contrast(1.02); }
+  .post-copy h2 { margin: 8px 0 7px; font-size: 19px; line-height: 1.12; letter-spacing: -.018em; font-weight: 560; }
+  .post-copy p { max-width: 620px; }
 
-  .posts-section { margin-top: 38px; }
-  .post-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .post-card { min-height: 230px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; text-decoration: none; background: rgba(255,255,252,.46); display: grid; }
-  .post-card.has-image { grid-template-rows: 135px 1fr; }
-  .post-image { border-bottom: 1px solid var(--line); }
-  .post-body { padding: 20px; display: flex; flex-direction: column; }
-  .post-body h2 { margin: 16px 0 9px; font-size: clamp(20px, 2.4vw, 28px); line-height: 1.06; letter-spacing: -.025em; font-weight: 520; }
-  .post-card .read { margin-top: auto; padding-top: 22px; }
-
-  @media (max-width: 760px) {
-    .featured-card { grid-template-columns: 1fr; }
-    .featured-image { min-height: 230px; order: -1; }
-  }
-  @media (max-width: 560px) {
-    .post-grid { grid-template-columns: 1fr; }
-    .intro h1 { font-size: 32px; }
-    .featured-copy h2 { font-size: 28px; }
+  @media (max-width: 680px) {
+    .intro { margin-bottom: 50px; }
+    .latest { grid-template-columns: 1fr; gap: 22px; margin-bottom: 58px; }
+    .latest-image img { aspect-ratio: 16 / 10; }
+    .post-row { grid-template-columns: 88px minmax(0, 1fr); gap: 18px; margin-bottom: 32px; }
+    .thumb img { width: 88px; height: 64px; }
   }
 </style>
