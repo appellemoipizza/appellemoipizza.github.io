@@ -30,7 +30,6 @@ concerned.
 | `INSTRUCTIONS.md` | this file | a file is added or removed, or its rules change |
 | `STATE.md` | what is in progress **right now** | after every completed step, and always before ending a session |
 | `MEMORY.md` | measured facts and gotchas the code does not state | you measured or discovered something durable |
-| `ROADMAP.md` | what is planned, in order | an item is finished, dropped, or reordered |
 | `README.md` | what this is and how to run/publish | setup, commands, or public interface changed |
 | `EDITORIAL.md` | Millie handoff, publication workflow and disclosure firewall | publishing/publicability rules change |
 | `docs/decisions/` | one file per decision, MADR format | a decision was made between real alternatives |
@@ -53,7 +52,7 @@ The repository is the history. The conversation is not.
 
 1. Read `STATE.md` first. If it describes work in progress, resume from its next action.
 2. Inspect recent git history/status/branches/tags.
-3. Read `MEMORY.md` and the current section of `ROADMAP.md`.
+3. Read `MEMORY.md`.
 4. Where a document disagrees with git, git wins. Say which document is stale rather than propagating it.
 5. State in one line where the project stands, then wait. Do not start work that was not asked for.
 
@@ -62,7 +61,6 @@ The repository is the history. The conversation is not.
 - [ ] **Tests pass.** Give the command and its actual output.
 - [ ] **A real user flow completes**, for anything user-facing.
 - [ ] **It is observable.** Build/deploy failures are visible.
-- [ ] **`ROADMAP.md` matches reality.** Trigger: an item finished or changed.
 - [ ] **`README.md` still accurate.** Trigger: setup, commands, or interface changed.
 - [ ] **Decision recorded in `docs/decisions/`.** Trigger: you chose between real alternatives.
 - [ ] **`MEMORY.md` updated.** Trigger: you measured or discovered something durable.
