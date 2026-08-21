@@ -9,18 +9,26 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#E4E5E2" />
+    <meta name="theme-color" content="#E9EAE8" />
     <meta name="description" content={description} />
     <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
     <title>{title}</title>
   </head>
   <body>
-    <div class="journal-shell">
+    <div class="site-frame">
       <aside class="journal-rail">
-        <a class="identity" href="/">ピザって呼んで</a>
-        <div class="rail-copy">
-          <span class="rail-title">journal</span>
-          <span class="rail-note">research<br />builds<br />notes</span>
+        <div class="rail-top">
+          <a class="identity" href="/">ピザって呼んで</a>
+          <span class="rail-kicker">journal</span>
+        </div>
+        <nav class="rail-nav" aria-label="Journal navigation">
+          <a class="active" href="/home">Home</a>
+          <span>Research</span>
+          <span>Builds</span>
+          <span>Notes</span>
+        </nav>
+        <div class="rail-bottom">
+          <a href="https://github.com/appellemoipizza">GitHub ↗</a>
         </div>
       </aside>
       <main><slot /></main>
@@ -30,9 +38,12 @@ const {
 
 <style is:global>
   :root {
-    --ink: #272724;
-    --muted: #7d7d76;
-    --paper: #fff;
+    --ink: #242522;
+    --muted: #7d7f79;
+    --paper: #fbfcfa;
+    --panel: #ffffff;
+    --line: #dedfd9;
+    --line-soft: #ecece8;
     --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, monospace;
   }
@@ -45,14 +56,17 @@ const {
   }
 
   html, body { margin: 0; min-height: 100%; }
+
   body {
+    min-height: 100vh;
+    padding: 10px;
     color: var(--ink);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
-    background-color: #E4E5E2;
+    background-color: #E9EAE8;
     background-image:
-      radial-gradient(circle, rgba(35, 36, 35, .12) 1px, transparent 1px),
-      linear-gradient(180deg, #F0F1EE 0%, #DADCD8 100%);
+      radial-gradient(circle, rgba(35,36,35,.11) 1px, transparent 1px),
+      linear-gradient(180deg,#F7F8F6 0%,#E2E3E0 100%);
     background-size: 7px 7px, 100% 100%;
     animation: drift 18s linear infinite;
   }
@@ -61,87 +75,102 @@ const {
   img { display: block; max-width: 100%; }
   ::selection { background: #d8d9d5; color: var(--ink); }
 
-  .journal-shell {
-    width: min(1260px, calc(100% - 20px));
-    min-height: 100vh;
+  .site-frame {
+    width: min(1320px, 100%);
+    min-height: calc(100vh - 20px);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 82px minmax(0, 1fr);
-    gap: 20px;
-    padding: 22px 0 64px;
+    grid-template-columns: 128px minmax(0, 1fr);
+    overflow: hidden;
+    background: var(--paper);
+    border: 1px solid rgba(35,36,35,.14);
+    border-radius: 11px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.9) inset,
+      0 18px 48px rgba(35,36,35,.08);
   }
 
   .journal-rail {
-    position: sticky;
-    top: 22px;
-    align-self: start;
-    min-height: calc(100vh - 86px);
+    min-height: calc(100vh - 22px);
+    padding: 22px 18px 18px;
+    border-right: 1px solid var(--line);
     display: flex;
     flex-direction: column;
-    padding-left: 2px;
+    background: rgba(251,252,250,.98);
   }
 
+  .rail-top { display: grid; gap: 9px; }
   .identity {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 650;
     line-height: 1.25;
     letter-spacing: -.02em;
     text-decoration: none;
     white-space: nowrap;
   }
 
-  .rail-copy {
-    margin-top: 38px;
+  .rail-kicker {
+    font: 7px/1 var(--mono);
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .rail-nav {
+    margin-top: 46px;
     display: grid;
-    gap: 7px;
+    gap: 15px;
+    font-size: 9px;
+    line-height: 1;
   }
 
-  .rail-title {
-    font: 8px/1 var(--mono);
-    color: var(--ink);
-    text-transform: lowercase;
-  }
+  .rail-nav a,
+  .rail-nav span { text-decoration: none; color: #666861; }
+  .rail-nav .active { color: var(--ink); }
+  .rail-nav .active::before { content: "•"; margin-right: 8px; }
 
-  .rail-note {
-    font: 7px/1.65 var(--mono);
+  .rail-bottom {
+    margin-top: auto;
+    display: grid;
+    gap: 8px;
+    font: 8px/1.4 var(--mono);
     color: var(--muted);
   }
+  .rail-bottom a { text-decoration: none; }
 
   main {
     min-width: 0;
     width: 100%;
-    max-width: 1080px;
+    padding: 18px;
+    background: #f8f8f5;
   }
 
   .eyebrow, .post-meta, .section-heading, .read { font-family: var(--mono); }
   .eyebrow { color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
-  .section-heading { margin-bottom: 12px; color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+  .section-heading { margin-bottom: 10px; color: #5f615c; font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
   .post-meta { color: var(--muted); font-size: 8px; line-height: 1.4; letter-spacing: .05em; text-transform: uppercase; }
-  .read { color: var(--muted); font-size: 8px; letter-spacing: .04em; text-transform: uppercase; }
+  .read { color: #5f615c; font-size: 8px; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; }
 
   @media (prefers-reduced-motion: reduce) {
     body { animation: none; }
   }
 
   @media (max-width: 720px) {
-    .journal-shell {
-      width: min(100% - 20px, 1080px);
-      grid-template-columns: 1fr;
-      gap: 28px;
-      padding: 16px 0 48px;
-    }
-
+    body { padding: 0; }
+    .site-frame { min-height: 100vh; border-radius: 0; border-left: 0; border-right: 0; grid-template-columns: 1fr; }
     .journal-rail {
-      position: static;
       min-height: auto;
+      padding: 14px 16px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
       flex-direction: row;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      padding-left: 0;
     }
-
-    .rail-copy { margin-top: 0; display: block; }
-    .rail-note { display: none; }
+    .rail-top { display: flex; align-items: baseline; gap: 10px; }
+    .rail-nav { margin: 0; display: block; }
+    .rail-nav span, .rail-nav .active::before { display: none; }
+    .rail-bottom { display: none; }
+    main { padding: 12px; }
   }
 </style>
