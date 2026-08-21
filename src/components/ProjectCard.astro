@@ -1,13 +1,25 @@
 ---
 const { project } = Astro.props;
 ---
-<a class="project-card" href={`/work/${project.id}`}>
+<a class="project-card physical-card" data-physical-card href={`/work/${project.id}`}>
+  {project.data.image && (
+    <div class="project-visual">
+      <img src={project.data.image} alt="" />
+      {project.data.imageSwap && <img class="swap" src={project.data.imageSwap} alt="" />}
+    </div>
+  )}
   <div class="project-top">
     <span class="kicker">{project.data.eyebrow}</span>
     <span class="meta">{project.data.status}</span>
   </div>
   <h3>{project.data.title}</h3>
   <p>{project.data.summary}</p>
+  {(project.data.character || project.data.world) && (
+    <div class="world-stamp">
+      {project.data.character && <span>{project.data.character}</span>}
+      {project.data.world && <span>{project.data.world}</span>}
+    </div>
+  )}
   <div class="tags">
     {project.data.tags.slice(0, 4).map((tag: string) => <span class="tag">{tag}</span>)}
   </div>
