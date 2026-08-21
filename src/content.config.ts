@@ -12,6 +12,7 @@ const notes = defineCollection({
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     project: z.string().optional(),
+    image: z.string().optional(),
     youtube: z.string().url().optional(),
     tags: z.array(z.string()).default([])
   })
