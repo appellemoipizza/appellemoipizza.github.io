@@ -46,5 +46,4 @@ This repository uses the special `appellemoipizza.github.io` Pages URL, so Astro
 - `docs/POST_TEMPLATE.md` — safe technical-post drafting checklist
 - `INSTRUCTIONS.md` — how this repository is worked on
 - `AGENTS.md` — shared agent behavior
-- `ROADMAP.md` — what happens next
 - `docs/decisions/` — why structural choices were made
