@@ -11,80 +11,187 @@ const rest = notes.slice(1);
 const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 ---
 <JournalLayout>
-  <header class="intro">
-    <div class="eyebrow">research journal</div>
-    <h1>Things I’m working on and thinking about.</h1>
+  <header class="journal-head">
+    <div>
+      <div class="eyebrow">research journal</div>
+      <h1>Things I’m working on and thinking about.</h1>
+    </div>
     <p>Research, build logs, experiments, useful hacks, and explanations of things I find interesting.</p>
   </header>
 
   {featured && (
-    <article class="article-card latest">
-      {featured.data.image && (
-        <a class="latest-image" href={`/notes/${featured.id}`}>
-          <img src={featured.data.image} alt="" />
-        </a>
-      )}
-      <div class="latest-copy">
+    <article class="article-card lead-card">
+      <div class="lead-copy">
         <div class="post-meta">{formatDate(featured.data.date)} · {featured.data.kind}</div>
         <a href={`/notes/${featured.id}`}><h2>{featured.data.title}</h2></a>
         <p>{featured.data.summary}</p>
         <a class="read" href={`/notes/${featured.id}`}>read ↗</a>
       </div>
+      {featured.data.image && (
+        <a class="lead-image" href={`/notes/${featured.id}`}>
+          <img src={featured.data.image} alt="" />
+        </a>
+      )}
     </article>
   )}
 
   {rest.length > 0 && (
-    <section class="journal-list" aria-labelledby="journal-heading">
+    <section class="journal-grid" aria-labelledby="journal-heading">
       <div class="section-heading" id="journal-heading">journal</div>
-      {rest.map((note) => (
-        <article class="article-card post-row">
-          {note.data.image && (
-            <a class="thumb" href={`/notes/${note.id}`}>
-              <img src={note.data.image} alt="" />
-            </a>
-          )}
-          <div class="post-copy">
-            <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
-            <a href={`/notes/${note.id}`}><h2>{note.data.title}</h2></a>
-            <p>{note.data.summary}</p>
-          </div>
-        </article>
-      ))}
+      <div class="grid">
+        {rest.map((note) => (
+          <article class="article-card post-card">
+            {note.data.image && (
+              <a class="post-image" href={`/notes/${note.id}`}>
+                <img src={note.data.image} alt="" />
+              </a>
+            )}
+            <div class="post-copy">
+              <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
+              <a href={`/notes/${note.id}`}><h2>{note.data.title}</h2></a>
+              <p>{note.data.summary}</p>
+              <a class="read" href={`/notes/${note.id}`}>read ↗</a>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   )}
 </JournalLayout>
 
 <style>
-  .intro { max-width: 600px; margin-bottom: 44px; }
-  .intro h1 { margin: 11px 0 10px; font-size: clamp(26px, 3.6vw, 38px); line-height: 1.08; letter-spacing: -.03em; font-weight: 560; }
-  .intro p { max-width: 560px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.58; }
+  .journal-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(220px, .85fr);
+    gap: 36px;
+    align-items: end;
+    margin: 10px 0 24px;
+  }
 
-  .article-card { background: #FBFCFA; }
-  .latest { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 0; align-items: stretch; margin-bottom: 42px; }
-  .latest-image { display: block; overflow: hidden; text-decoration: none; min-height: 100%; }
-  .latest-image img { width: 100%; height: 100%; min-height: 280px; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.02); transition: filter .2s ease; }
-  .latest-image:hover img { filter: grayscale(.25) contrast(1.02); }
-  .latest-copy { padding: 30px; }
-  .latest-copy a, .post-copy a { text-decoration: none; }
-  .latest-copy h2 { margin: 17px 0 10px; font-size: clamp(24px, 3vw, 34px); line-height: 1.08; letter-spacing: -.025em; font-weight: 560; }
-  .latest-copy p, .post-copy p { margin: 0; color: #77766f; font-size: 12px; line-height: 1.58; }
-  .latest-copy .read { display: inline-block; margin-top: 24px; }
+  .journal-head h1 {
+    max-width: 600px;
+    margin: 9px 0 0;
+    font-size: clamp(25px, 3.1vw, 36px);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+    font-weight: 560;
+  }
 
-  .journal-list { margin-top: 8px; }
-  .post-row { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 24px; align-items: center; margin: 0 0 16px; padding: 18px; }
-  .post-row:not(:has(.thumb)) { grid-template-columns: 1fr; }
-  .thumb { display: block; text-decoration: none; }
-  .thumb img { width: 124px; height: 86px; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.02); transition: filter .2s ease; }
-  .thumb:hover img { filter: grayscale(.25) contrast(1.02); }
-  .post-copy h2 { margin: 8px 0 7px; font-size: 19px; line-height: 1.12; letter-spacing: -.018em; font-weight: 560; }
-  .post-copy p { max-width: 620px; }
+  .journal-head p {
+    max-width: 430px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
 
-  @media (max-width: 680px) {
-    .intro { margin-bottom: 36px; }
-    .latest { grid-template-columns: 1fr; margin-bottom: 34px; }
-    .latest-image img { min-height: 0; aspect-ratio: 16 / 10; }
-    .latest-copy { padding: 22px; }
-    .post-row { grid-template-columns: 88px minmax(0, 1fr); gap: 16px; margin-bottom: 12px; padding: 14px; }
-    .thumb img { width: 88px; height: 64px; }
+  .article-card {
+    background: #FFFFFF;
+    box-shadow: 0 10px 24px rgba(35, 36, 35, .06);
+  }
+
+  .lead-card {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    min-height: 360px;
+    margin-bottom: 24px;
+  }
+
+  .lead-copy {
+    padding: clamp(26px, 3.4vw, 42px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lead-copy a, .post-copy a { text-decoration: none; }
+
+  .lead-copy h2 {
+    margin: 18px 0 11px;
+    font-size: clamp(25px, 3vw, 34px);
+    line-height: 1.08;
+    letter-spacing: -.027em;
+    font-weight: 560;
+  }
+
+  .lead-copy p,
+  .post-copy p {
+    margin: 0;
+    color: #72726c;
+    font-size: 12px;
+    line-height: 1.58;
+  }
+
+  .lead-copy .read {
+    margin-top: auto;
+    padding-top: 28px;
+  }
+
+  .lead-image,
+  .post-image {
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    background: #e7e8e4;
+  }
+
+  .lead-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    object-fit: cover;
+    image-rendering: pixelated;
+    filter: grayscale(1) contrast(1.02);
+    transition: filter .2s ease;
+  }
+
+  .lead-image:hover img,
+  .post-image:hover img { filter: grayscale(.2) contrast(1.02); }
+
+  .journal-grid { margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+
+  .post-card {
+    min-height: 250px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .post-card:not(:has(.post-image)) { grid-template-rows: 1fr; }
+
+  .post-image img {
+    width: 100%;
+    aspect-ratio: 16 / 8.7;
+    object-fit: cover;
+    image-rendering: pixelated;
+    filter: grayscale(1) contrast(1.02);
+    transition: filter .2s ease;
+  }
+
+  .post-copy {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-copy h2 {
+    margin: 12px 0 8px;
+    font-size: 19px;
+    line-height: 1.12;
+    letter-spacing: -.018em;
+    font-weight: 560;
+  }
+
+  .post-copy .read {
+    margin-top: auto;
+    padding-top: 22px;
+  }
+
+  @media (max-width: 760px) {
+    .journal-head { grid-template-columns: 1fr; gap: 12px; margin-top: 0; }
+    .lead-card { grid-template-columns: 1fr; }
+    .lead-image { order: -1; }
+    .lead-image img { min-height: 0; aspect-ratio: 16 / 9; }
+    .lead-copy { padding: 22px; }
+    .grid { grid-template-columns: 1fr; }
   }
 </style>
