@@ -13,7 +13,7 @@ concerned.
 ## 1. Project facts
 
 - **Name:** Thomas Vezzani — personal lab
-- **What it is:** Personal publishing site for Thomas's software, AI systems, experiments, films, and reusable resources, entered through his interactive visit-card homepage.
+- **What it is:** Personal research journal and publishing site for software, AI systems, experiments, films and useful things learned by making them.
 - **Status:** live
 - **Machine:** Mac. This repository is only ever worked on there. A copy on any other machine is a read-only mirror. Never commit in one.
 - **Stack:** Astro 7, TypeScript, Markdown content collections, npm
@@ -31,21 +31,18 @@ concerned.
 | `STATE.md` | what is in progress **right now** | after every completed step, and always before ending a session |
 | `MEMORY.md` | measured facts and gotchas the code does not state | you measured or discovered something durable |
 | `ROADMAP.md` | what is planned, in order | an item is finished, dropped, or reordered |
-| `README.md` | what this is and how to run it | setup, commands, or public interface changed |
-| `EDITORIAL.md` | Millie → content signal → draft → human review → publish contract | editorial workflow changes |
+| `README.md` | what this is and how to run/publish | setup, commands, or public interface changed |
+| `EDITORIAL.md` | Millie handoff, publication workflow and disclosure firewall | publishing/publicability rules change |
 | `docs/decisions/` | one file per decision, MADR format | a decision was made between real alternatives |
-| `src/pages/index.astro` | interactive visit-card front door at `/` | landing identity or interaction changes |
-| `src/pages/home.astro` | publishing hub behind the card at `/home` | publishing-home structure changes |
-| `src/data/notes/` | public notes/essays/video metadata | content is drafted or published |
-| `src/data/projects/` | selected public work/case studies | public project presentation changes |
-| `public/assets/` | dithered visit-card and publishing imagery/icons | visual assets change |
-| `index.html`, `style.css`, `script.js`, `assets/` | original visit-card source/reference | preserve unless explicitly replaced by the human |
+| `src/pages/index.astro` | permanent authored visit-card front door | only on explicit human request |
+| `src/pages/home.astro` | quiet research-journal home | journal layout or publishing surface changes |
+| `src/layouts/JournalLayout.astro` | shared journal shell/rail/room styling | journal navigation or visual shell changes |
+| `src/data/notes/` | public/draft writing and video metadata | a post is drafted or published |
+| `public/assets/` | dithered personal imagery and post assets | visual assets change |
 
 ## 3. Conventions
 
-This project follows these standards. They are not optional and they are not project-specific opinions.
-
-- **Conventional Commits** for every commit message. `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, and `!` or a `BREAKING CHANGE:` footer for breaking changes.
+- **Conventional Commits** for every commit message.
 - **Semantic Versioning**. Versions are computed from commit types, never chosen by hand.
 - **MADR** for `docs/decisions/`.
 - **GitHub Flow.** Short branch off `main`, pull request, merge. `main` is always releasable.
@@ -62,14 +59,12 @@ The repository is the history. The conversation is not.
 
 ## 5. Before calling any piece of work done
 
-State the outcome of each, including "not applicable" and why.
-
-- [ ] **Tests pass.** Give the command and its actual output, not the expected one.
+- [ ] **Tests pass.** Give the command and its actual output.
 - [ ] **A real user flow completes**, for anything user-facing.
-- [ ] **It is observable.** Build/deploy failures are visible; analytics are optional and must remain privacy-respecting.
+- [ ] **It is observable.** Build/deploy failures are visible.
 - [ ] **`ROADMAP.md` matches reality.** Trigger: an item finished or changed.
 - [ ] **`README.md` still accurate.** Trigger: setup, commands, or interface changed.
-- [ ] **Decision recorded in `docs/decisions/`.** Trigger: you chose between real alternatives. Include reversibility and a revisit trigger.
+- [ ] **Decision recorded in `docs/decisions/`.** Trigger: you chose between real alternatives.
 - [ ] **`MEMORY.md` updated.** Trigger: you measured or discovered something durable.
 - [ ] **`STATE.md` rewritten.** Always. Empty to "No work in progress" if the work shipped.
 - [ ] **Commit message follows Conventional Commits.**
@@ -78,13 +73,15 @@ State the outcome of each, including "not applicable" and why.
 ## 6. Project specifics
 
 - The site is Thomas's personal research/creative surface, not the Always Late corporate site.
-- **The interactive visit card at `/` is the permanent front door and a designed artifact in its own right. Do not replace it with the publishing hub, flatten it into a conventional homepage, or remove its 3D tilt, grab-to-flip, cursor trail, dither swaps, physical-card feel, or simplicity unless Thomas explicitly asks.**
-- The deeper publishing system lives behind the card. `/home` is the publishing hub; Work / Notes / Lab / Resources / About are secondary surfaces reached from there.
-- Keep the existing Japanese/dithered/late-night personal-computer character. Do not turn it into a generic developer portfolio or SaaS landing page.
-- Git is the CMS. Public writing and case studies live as Markdown content in-repo; no CMS, database, account system, or admin UI without evidence that one is needed.
-- Prefer static output and minimal client JavaScript, except where interaction is itself part of the authored experience (the visit card is the explicit example).
-- `src/data/notes/` is public writing/video metadata; `src/data/projects/` is selected public work. Draft entries must never appear in production routes, feeds, or indexes.
+- `/` is a permanent authored front door. Preserve its one-screen simplicity, 3D tilt, grab-to-flip, cursor/pixel trail, dither swaps and personal identity unless Thomas explicitly asks to change them.
+- `/home` is a quiet research journal, not a product dashboard, creator funnel or forced visual universe.
+- Keep the Japanese/dithered/late-night personal-computer character, but do not make every post carry a mascot, illustration system or elaborate art direction.
+- Git is the CMS. Public writing lives as Markdown content in-repo; no CMS, database, account system or admin UI without evidence that one is needed.
+- Publishing must remain dead simple: decide → write one Markdown file → optionally add one image → review → publish.
+- Text-only posts are first-class. Never block publication because an image or visual concept is missing.
+- Write for two depths: a normal reader should understand the problem and why it matters; a technical reader should find real methodology, evidence, caveats and terminology below that layer.
+- Accessible does not mean oversimplified. Technical does not mean unnecessarily opaque.
+- `EDITORIAL.md` is mandatory for any draft derived from private work. Use its disclosure levels and moat-risk gate.
+- Public evidence of competence is desirable; reproducible disclosure of proprietary advantage is not.
 - Millie may recommend and draft content from real work, but must never publish, disclose private repository details, or flip `draft: true` to public without explicit human approval.
-- A content idea is worth surfacing when real work produced a useful lesson, visual artifact, reusable mechanism, surprising decision, failure/reversal, or coherent story. Do not manufacture a posting cadence.
-- Anything derived from private company/product work needs a publicability check before drafting: no secrets, private customer data, credentials, confidential commercial detail, or unannounced facts.
-- Current success signal: arriving at the domain still feels like Thomas's original authored visit card; from there a visitor can deliberately enter a richer body of work without the publishing system swallowing the identity piece.
+- Do not manufacture a posting cadence. A post exists when the work produced something worth documenting.
