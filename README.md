@@ -32,7 +32,7 @@ The intended workflow is deliberately small:
 
 Required note fields are title, summary, date and kind. Tags are optional. Images are optional; text-only notes are first-class and should still look complete.
 
-See `EDITORIAL.md` for the Millie → signal → draft → review → publish contract and the publication firewall for proprietary or sensitive technical work.
+See `EDITORIAL.md` for the Millie → signal → draft → review → publish contract and publication firewall. `docs/POST_TEMPLATE.md` is the internal drafting/checklist template for technical posts.
 
 ## Deployment
 
@@ -43,6 +43,7 @@ This repository uses the special `appellemoipizza.github.io` Pages URL, so Astro
 ## Documentation
 
 - `EDITORIAL.md` — public content, Millie handoff and disclosure rules
+- `docs/POST_TEMPLATE.md` — safe technical-post drafting checklist
 - `INSTRUCTIONS.md` — how this repository is worked on
 - `AGENTS.md` — shared agent behavior
 - `ROADMAP.md` — what happens next
