@@ -1,7 +1,7 @@
 ---
 title: Millie
 eyebrow: operating intelligence
-summary: A coordinating intelligence for a one-person software company: one human interface above replaceable models, tools, specialist routes and project execution.
+summary: "A coordinating intelligence for a one-person software company: one human interface above replaceable models, tools, specialist routes and project execution."
 status: active R&D
 role: creator / system designer
 year: 2026
