@@ -13,12 +13,24 @@ const {
     <meta name="description" content={description} />
     <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
     <title>{title}</title>
+    <script is:inline>
+      try {
+        if (localStorage.getItem('journalSidebarCollapsed') === '1') {
+          document.documentElement.classList.add('sidebar-collapsed');
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div class="site-frame">
       <aside class="journal-rail">
         <div class="rail-top">
-          <a class="identity" href="/">ピザって呼んで</a>
+          <div class="rail-top-row">
+            <a class="identity" href="/">ピザって呼んで</a>
+            <button class="icon-btn" id="sidebar-hide" type="button" aria-label="Hide sidebar" title="Hide sidebar">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="6" y1="2.5" x2="6" y2="13.5" stroke="currentColor" stroke-width="1.3"/></svg>
+            </button>
+          </div>
           <span class="rail-kicker">journal</span>
         </div>
         <nav class="rail-nav" aria-label="Journal navigation">
@@ -31,8 +43,25 @@ const {
           <a href="https://github.com/appellemoipizza">GitHub ↗</a>
         </div>
       </aside>
-      <main><slot /></main>
+      <main>
+        <button class="icon-btn sidebar-show" id="sidebar-show" type="button" aria-label="Show sidebar" title="Show sidebar">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="6" y1="2.5" x2="6" y2="13.5" stroke="currentColor" stroke-width="1.3"/></svg>
+        </button>
+        <slot />
+      </main>
     </div>
+    <script is:inline>
+      (function () {
+        var hide = document.getElementById('sidebar-hide');
+        var show = document.getElementById('sidebar-show');
+        function setCollapsed(collapsed) {
+          document.documentElement.classList.toggle('sidebar-collapsed', collapsed);
+          try { localStorage.setItem('journalSidebarCollapsed', collapsed ? '1' : '0'); } catch (e) {}
+        }
+        if (hide) hide.addEventListener('click', function () { setCollapsed(true); });
+        if (show) show.addEventListener('click', function () { setCollapsed(false); });
+      })();
+    </script>
   </body>
 </html>
 
@@ -70,12 +99,20 @@ const {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 124px minmax(0, 1fr);
+    transition: grid-template-columns .18s ease;
     overflow: hidden;
     background: var(--paper);
     border: 1px solid rgba(35,36,35,.14);
     border-radius: 11px;
     box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 18px 48px rgba(35,36,35,.08);
   }
+  html.sidebar-collapsed .site-frame { grid-template-columns: 0px minmax(0, 1fr); }
+  html.sidebar-collapsed .journal-rail { padding: 22px 0 17px; border-right-color: transparent; overflow: hidden; }
+  html.sidebar-collapsed .journal-rail > * { opacity: 0; pointer-events: none; }
+
+  .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--ink); cursor: pointer; flex: none; }
+  .icon-btn:hover { background: var(--line-soft); }
+
   .journal-rail {
     min-height: calc(100vh - 22px);
     padding: 22px 17px 17px;
@@ -85,6 +122,7 @@ const {
     background: rgba(251,252,250,.98);
   }
   .rail-top { display: grid; gap: 9px; }
+  .rail-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .identity { font-size: 10px; font-weight: 650; line-height: 1.25; letter-spacing: -.02em; text-decoration: none; white-space: nowrap; }
   .rail-kicker { font: 7px/1 var(--mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
   .rail-nav { margin-top: 44px; display: grid; gap: 15px; font-size: 9px; line-height: 1; }
@@ -93,7 +131,9 @@ const {
   .rail-nav .active::before { content: "•"; margin-right: 8px; }
   .rail-bottom { margin-top: auto; display: grid; gap: 8px; font: 8px/1.4 var(--mono); color: var(--muted); }
   .rail-bottom a { text-decoration: none; }
-  main { min-width: 0; width: 100%; padding: 20px; background: #f8f8f5; }
+  main { position: relative; min-width: 0; width: 100%; padding: 20px; background: #f8f8f5; }
+  .sidebar-show { display: none; position: absolute; top: 14px; left: 14px; z-index: 5; background: var(--panel); border-color: var(--line); }
+  html.sidebar-collapsed .sidebar-show { display: inline-flex; }
   .eyebrow, .post-meta, .section-heading, .read { font-family: var(--mono); }
   .eyebrow { color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
   .section-heading { margin-bottom: 10px; color: #5f615c; font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
@@ -102,12 +142,16 @@ const {
   @media (prefers-reduced-motion: reduce) { body { animation: none; } }
   @media (max-width: 720px) {
     body { padding: 0; }
-    .site-frame { min-height: 100vh; border-radius: 0; border-left: 0; border-right: 0; grid-template-columns: 1fr; }
-    .journal-rail { min-height: auto; padding: 14px 16px; border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; align-items: center; justify-content: space-between; }
+    .site-frame, html.sidebar-collapsed .site-frame { min-height: 100vh; border-radius: 0; border-left: 0; border-right: 0; grid-template-columns: 1fr; }
+    .journal-rail, html.sidebar-collapsed .journal-rail { min-height: auto; padding: 14px 16px; border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; align-items: center; justify-content: space-between; }
+    html.sidebar-collapsed .journal-rail > * { opacity: 1; pointer-events: auto; }
     .rail-top { display: flex; align-items: baseline; gap: 10px; }
+    .rail-top-row { gap: 6px; }
+    #sidebar-hide { display: none; }
     .rail-nav { margin: 0; display: block; }
     .rail-nav span, .rail-nav .active::before { display: none; }
     .rail-bottom { display: none; }
     main { padding: 12px; }
+    .sidebar-show { display: none !important; }
   }
 </style>

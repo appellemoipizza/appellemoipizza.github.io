@@ -5,5 +5,8 @@ export default defineConfig({
   site: 'https://appellemoipizza.github.io',
   output: 'static',
   trailingSlash: 'never',
-  integrations: [sitemap()]
+  integrations: [sitemap()],
+  markdown: {
+    shikiConfig: { theme: 'github-light' }
+  }
 });
