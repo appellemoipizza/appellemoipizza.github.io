@@ -3,7 +3,7 @@ title: How Millie decides who does the work
 summary: A technical look at the layer underneath Millie that turns a request into a task, a capability, and a chosen route — without the exact rules that make it hers.
 date: 2026-08-21
 kind: note
-draft: true
+draft: false
 featured: false
 project: millie
 tags: [agents, orchestration, architecture, schemas]
