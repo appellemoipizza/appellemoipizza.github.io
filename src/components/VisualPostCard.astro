@@ -1,0 +1,30 @@
+---
+const { note } = Astro.props;
+const date = note.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+---
+<a class="visual-post physical-card" data-physical-card href={`/notes/${note.id}`}>
+  <div class="visual-post-media">
+    {note.data.cover ? (
+      <>
+        <img src={note.data.cover} alt="" />
+        {note.data.coverSwap && <img class="swap" src={note.data.coverSwap} alt="" />}
+      </>
+    ) : (
+      <div class="visual-placeholder" aria-hidden="true">
+        <span>{note.data.project ?? 'visual world'}</span>
+        <b>{note.data.character ?? 'specimen pending'}</b>
+      </div>
+    )}
+  </div>
+  <div class="visual-post-copy">
+    <div class="meta">{date} · {note.data.kind}</div>
+    <h3>{note.data.title}</h3>
+    <p>{note.data.summary}</p>
+    {(note.data.character || note.data.world) && (
+      <div class="world-stamp">
+        {note.data.character && <span>{note.data.character}</span>}
+        {note.data.world && <span>{note.data.world}</span>}
+      </div>
+    )}
+  </div>
+</a>
