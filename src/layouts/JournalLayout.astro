@@ -9,7 +9,7 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#E9EAE8" />
+    <meta name="theme-color" content="#E4E5E2" />
     <meta name="description" content={description} />
     <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
     <title>{title}</title>
@@ -20,7 +20,7 @@ const {
         <a class="identity" href="/">ピザって呼んで</a>
         <div class="rail-copy">
           <span class="rail-title">journal</span>
-          <span class="rail-note">research / builds / notes</span>
+          <span class="rail-note">research<br />builds<br />notes</span>
         </div>
       </aside>
       <main><slot /></main>
@@ -31,7 +31,8 @@ const {
 <style is:global>
   :root {
     --ink: #272724;
-    --muted: #85847d;
+    --muted: #7d7d76;
+    --paper: #fff;
     --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, monospace;
   }
@@ -48,10 +49,10 @@ const {
     color: var(--ink);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
-    background-color: #E9EAE8;
+    background-color: #E4E5E2;
     background-image:
-      radial-gradient(circle, rgba(35, 36, 35, 0.11) 1px, transparent 1px),
-      linear-gradient(180deg, #F7F8F6 0%, #E2E3E0 100%);
+      radial-gradient(circle, rgba(35, 36, 35, .12) 1px, transparent 1px),
+      linear-gradient(180deg, #F0F1EE 0%, #DADCD8 100%);
     background-size: 7px 7px, 100% 100%;
     animation: drift 18s linear infinite;
   }
@@ -61,61 +62,62 @@ const {
   ::selection { background: #d8d9d5; color: var(--ink); }
 
   .journal-shell {
-    width: min(1160px, calc(100% - 24px));
+    width: min(1260px, calc(100% - 20px));
     min-height: 100vh;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr);
-    gap: clamp(26px, 4vw, 52px);
-    padding: 34px 0 72px;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 20px;
+    padding: 22px 0 64px;
   }
 
   .journal-rail {
     position: sticky;
-    top: 34px;
+    top: 22px;
     align-self: start;
-    min-height: calc(100vh - 106px);
+    min-height: calc(100vh - 86px);
     display: flex;
     flex-direction: column;
+    padding-left: 2px;
   }
 
   .identity {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
+    line-height: 1.25;
     letter-spacing: -.02em;
     text-decoration: none;
     white-space: nowrap;
   }
 
   .rail-copy {
-    margin-top: 46px;
+    margin-top: 38px;
     display: grid;
-    gap: 6px;
+    gap: 7px;
   }
 
   .rail-title {
-    font: 9px/1 var(--mono);
+    font: 8px/1 var(--mono);
     color: var(--ink);
     text-transform: lowercase;
   }
 
   .rail-note {
-    max-width: 96px;
-    font: 8px/1.5 var(--mono);
+    font: 7px/1.65 var(--mono);
     color: var(--muted);
   }
 
   main {
     min-width: 0;
     width: 100%;
-    max-width: 860px;
+    max-width: 1080px;
   }
 
   .eyebrow, .post-meta, .section-heading, .read { font-family: var(--mono); }
-  .eyebrow { color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
-  .section-heading { margin-bottom: 22px; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
-  .post-meta { color: var(--muted); font-size: 9px; line-height: 1.4; letter-spacing: .05em; text-transform: uppercase; }
-  .read { color: var(--muted); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+  .eyebrow { color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+  .section-heading { margin-bottom: 12px; color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+  .post-meta { color: var(--muted); font-size: 8px; line-height: 1.4; letter-spacing: .05em; text-transform: uppercase; }
+  .read { color: var(--muted); font-size: 8px; letter-spacing: .04em; text-transform: uppercase; }
 
   @media (prefers-reduced-motion: reduce) {
     body { animation: none; }
@@ -123,10 +125,10 @@ const {
 
   @media (max-width: 720px) {
     .journal-shell {
-      width: min(100% - 24px, 860px);
+      width: min(100% - 20px, 1080px);
       grid-template-columns: 1fr;
-      gap: 36px;
-      padding: 20px 0 54px;
+      gap: 28px;
+      padding: 16px 0 48px;
     }
 
     .journal-rail {
@@ -135,14 +137,11 @@ const {
       flex-direction: row;
       align-items: baseline;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
+      padding-left: 0;
     }
 
-    .rail-copy {
-      margin-top: 0;
-      display: block;
-    }
-
+    .rail-copy { margin-top: 0; display: block; }
     .rail-note { display: none; }
   }
 </style>
