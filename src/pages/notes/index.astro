@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoteRow from '../../components/NoteRow.astro';
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft).sort((a,b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="Notes — Thomas Vezzani" description="Writing, build logs and films about software, AI systems, local-first computing and product craft.">
+  <div class="shell">
+    <header class="page-intro">
+      <div class="kicker">Notes / films / build logs</div>
+      <h1 class="page-title">Things I figured out by making them.</h1>
+      <p>No posting quota. A note exists when the work produced something worth carrying forward: a useful mechanism, a reversal, a failure, a visual artifact, or a point of view I can defend.</p>
+    </header>
+    <div class="note-list">
+      {notes.map((note) => <NoteRow note={note} />)}
+    </div>
+  </div>
+</BaseLayout>

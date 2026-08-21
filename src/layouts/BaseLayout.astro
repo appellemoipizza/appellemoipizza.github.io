@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+const {
+  title = 'Thomas Vezzani — software, AI & experiments',
+  description = 'Personal lab for thoughtful software, AI systems, experiments, films, and things I am figuring out.'
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#E9EAE7" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Thomas Vezzani" href="/rss.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="/">
+          <span class="brand-jp">ピザって呼んで</span>
+          <span class="brand-name">thomas</span>
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href="/work" aria-current={Astro.url.pathname.startsWith('/work') ? 'page' : undefined}>Work</a>
+          <a href="/notes" aria-current={Astro.url.pathname.startsWith('/notes') ? 'page' : undefined}>Notes</a>
+          <a href="/lab" aria-current={Astro.url.pathname === '/lab' ? 'page' : undefined}>Lab</a>
+          <a href="/resources" aria-current={Astro.url.pathname === '/resources' ? 'page' : undefined}>Resources</a>
+          <a href="/about" aria-current={Astro.url.pathname === '/about' ? 'page' : undefined}>About</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div class="footer-links">
+          <a href="https://github.com/appellemoipizza">GitHub</a>
+          <a href="https://www.linkedin.com/in/thomasv26">LinkedIn</a>
+          <a href="https://alwayslatetechnologies.com">Always Late</a>
+          <a href="/rss.xml">RSS</a>
+        </div>
+        <div class="footer-note">Software made by a user, for users. Brussels. Mostly working at night.</div>
+      </div>
+    </footer>
+  </body>
+</html>

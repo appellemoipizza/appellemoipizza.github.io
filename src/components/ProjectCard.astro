@@ -1,0 +1,14 @@
+---
+const { project } = Astro.props;
+---
+<a class="project-card" href={`/work/${project.id}`}>
+  <div class="project-top">
+    <span class="kicker">{project.data.eyebrow}</span>
+    <span class="meta">{project.data.status}</span>
+  </div>
+  <h3>{project.data.title}</h3>
+  <p>{project.data.summary}</p>
+  <div class="tags">
+    {project.data.tags.slice(0, 4).map((tag: string) => <span class="tag">{tag}</span>)}
+  </div>
+</a>
