@@ -1,7 +1,7 @@
 ---
 title: Wakomi
 eyebrow: resident companion
-summary: An iOS-first AI companion for international residents of Japan: understand documents, ask administrative questions, translate and prepare Japanese with evidence attached.
+summary: "An iOS-first AI companion for international residents of Japan: understand documents, ask administrative questions, translate and prepare Japanese with evidence attached."
 status: pre-v1.0
 role: founder / product / system design
 year: 2026
