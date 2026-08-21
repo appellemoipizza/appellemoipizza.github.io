@@ -8,11 +8,15 @@ const notes = defineCollection({
     title: z.string(),
     summary: z.string(),
     date: z.coerce.date(),
-    kind: z.enum(['note', 'essay', 'film', 'log']),
+    kind: z.enum(['note', 'essay', 'film', 'log', 'visual-world']),
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
     project: z.string().optional(),
     youtube: z.string().url().optional(),
+    cover: z.string().optional(),
+    coverSwap: z.string().optional(),
+    character: z.string().optional(),
+    world: z.string().optional(),
     tags: z.array(z.string()).default([])
   })
 });
@@ -31,6 +35,9 @@ const projects = defineCollection({
     repo: z.string().url().optional(),
     url: z.string().url().optional(),
     image: z.string().optional(),
+    imageSwap: z.string().optional(),
+    character: z.string().optional(),
+    world: z.string().optional(),
     tags: z.array(z.string()).default([])
   })
 });
