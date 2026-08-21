@@ -1,6 +1,6 @@
 ---
 title: I want AI to say less
-summary: Across several projects I kept independently rebuilding the same idea: uncertainty, abstention and silence are product features, not embarrassing gaps to hide.
+summary: "Across several projects I kept independently rebuilding the same idea: uncertainty, abstention and silence are product features, not embarrassing gaps to hide."
 date: 2026-08-21
 kind: essay
 draft: false
