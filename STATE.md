@@ -1,3 +1,1 @@
-# STATE
-
-No work in progress.
+Research-journal redesign is implemented on `home-publishing-index` and awaiting CI / merge. `/` visit card is unchanged. Next action: merge PR #5 only after `npm run check` passes, then verify the live Pages smoke status.
