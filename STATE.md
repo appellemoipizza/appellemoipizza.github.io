@@ -1,1 +1,1 @@
-Research-journal redesign and publication firewall are implemented on `home-publishing-index` and awaiting CI / merge. `/` visit card is unchanged. Next action: merge PR #5 only after the latest `npm run check` passes, then verify the live Pages smoke status.
+Research-journal redesign and publication firewall are implemented on `home-publishing-index`. `npm run check` passed in CI. Next action: merge PR #5, verify Pages live smoke, then clear STATE.
