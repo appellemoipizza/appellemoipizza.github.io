@@ -13,7 +13,7 @@ concerned.
 ## 1. Project facts
 
 - **Name:** Thomas Vezzani — personal lab
-- **What it is:** Personal publishing site for Thomas's software, AI systems, experiments, films, and reusable resources.
+- **What it is:** Personal publishing site for Thomas's software, AI systems, experiments, films, and reusable resources, entered through his interactive visit-card homepage.
 - **Status:** live
 - **Machine:** Mac. This repository is only ever worked on there. A copy on any other machine is a read-only mirror. Never commit in one.
 - **Stack:** Astro 7, TypeScript, Markdown content collections, npm
@@ -32,11 +32,14 @@ concerned.
 | `MEMORY.md` | measured facts and gotchas the code does not state | you measured or discovered something durable |
 | `ROADMAP.md` | what is planned, in order | an item is finished, dropped, or reordered |
 | `README.md` | what this is and how to run it | setup, commands, or public interface changed |
+| `EDITORIAL.md` | Millie → content signal → draft → human review → publish contract | editorial workflow changes |
 | `docs/decisions/` | one file per decision, MADR format | a decision was made between real alternatives |
-| `index.html` | current legacy visit-card homepage | removed when the Astro publishing surface ships |
-| `style.css` | current legacy visit-card styles | removed when the Astro publishing surface ships |
-| `script.js` | current legacy visit-card interaction | removed when the Astro publishing surface ships |
-| `assets/` | current dithered personal imagery and icons | preserve/migrate when the visual system changes |
+| `src/pages/index.astro` | interactive visit-card front door at `/` | landing identity or interaction changes |
+| `src/pages/home.astro` | publishing hub behind the card at `/home` | publishing-home structure changes |
+| `src/data/notes/` | public notes/essays/video metadata | content is drafted or published |
+| `src/data/projects/` | selected public work/case studies | public project presentation changes |
+| `public/assets/` | dithered visit-card and publishing imagery/icons | visual assets change |
+| `index.html`, `style.css`, `script.js`, `assets/` | original visit-card source/reference | preserve unless explicitly replaced by the human |
 
 ## 3. Conventions
 
@@ -75,11 +78,13 @@ State the outcome of each, including "not applicable" and why.
 ## 6. Project specifics
 
 - The site is Thomas's personal research/creative surface, not the Always Late corporate site.
+- **The interactive visit card at `/` is the permanent front door and a designed artifact in its own right. Do not replace it with the publishing hub, flatten it into a conventional homepage, or remove its 3D tilt, grab-to-flip, cursor trail, dither swaps, physical-card feel, or simplicity unless Thomas explicitly asks.**
+- The deeper publishing system lives behind the card. `/home` is the publishing hub; Work / Notes / Lab / Resources / About are secondary surfaces reached from there.
 - Keep the existing Japanese/dithered/late-night personal-computer character. Do not turn it into a generic developer portfolio or SaaS landing page.
 - Git is the CMS. Public writing and case studies live as Markdown content in-repo; no CMS, database, account system, or admin UI without evidence that one is needed.
-- Prefer static output and minimal client JavaScript.
+- Prefer static output and minimal client JavaScript, except where interaction is itself part of the authored experience (the visit card is the explicit example).
 - `src/data/notes/` is public writing/video metadata; `src/data/projects/` is selected public work. Draft entries must never appear in production routes, feeds, or indexes.
 - Millie may recommend and draft content from real work, but must never publish, disclose private repository details, or flip `draft: true` to public without explicit human approval.
 - A content idea is worth surfacing when real work produced a useful lesson, visual artifact, reusable mechanism, surprising decision, failure/reversal, or coherent story. Do not manufacture a posting cadence.
 - Anything derived from private company/product work needs a publicability check before drafting: no secrets, private customer data, credentials, confidential commercial detail, or unannounced facts.
-- Current success signal: the site makes it easy to understand what Thomas builds, browse selected work, publish a note/video by adding one Markdown file, and expose reusable resources without turning commerce into the homepage.
+- Current success signal: arriving at the domain still feels like Thomas's original authored visit card; from there a visitor can deliberately enter a richer body of work without the publishing system swallowing the identity piece.

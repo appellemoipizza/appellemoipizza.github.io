@@ -8,7 +8,7 @@ Ordered. The top item is what is being worked on now.
 
 ## Next
 
-- Verify the Astro GitHub Pages deployment and remove the legacy root-site fallback once Actions is confirmed as the Pages source.
+- Refine the transition from the visit-card front door into `/home` only if real use shows the quiet entry affordance is too hidden or too prominent.
 - Add video embeds only when the first real vlog exists; do not build a video CMS in advance.
 - Package the first reusable resource only after it has survived repeated internal use.
 
@@ -19,6 +19,8 @@ Ordered. The top item is what is being worked on now.
 
 ## Explicitly not doing
 
+- Replacing the interactive visit card with a conventional content homepage.
+- Removing the card's 3D interaction, dither swaps, cursor trail or physical-object character for the sake of framework consistency.
 - Generic developer portfolio with technology-skill bars.
 - Database/CMS/account system for publishing.
 - Automatic AI publishing.

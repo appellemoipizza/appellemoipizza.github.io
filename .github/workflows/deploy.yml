@@ -47,13 +47,13 @@ jobs:
         run: |
           set -euo pipefail
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
-            if curl -fsSL --max-time 15 "$PAGE_URL" | grep -Fq 'I make software, AI systems, and small experiments.'; then
-              echo "Verified new portfolio at $PAGE_URL"
+            if curl -fsSL --max-time 15 "$PAGE_URL" | grep -Fq 'ピザって呼んで'; then
+              echo "Verified card entry at $PAGE_URL"
               exit 0
             fi
             sleep 2
           done
-          echo "Homepage did not expose the expected portfolio marker after deployment." >&2
+          echo "Homepage did not expose the expected card marker after deployment." >&2
           exit 1
 
   status:
