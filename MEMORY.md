@@ -1,30 +1,10 @@
-# MEMORY
+# Memory
 
-What is true about this project that the code does not say. Measured numbers,
-gotchas, things that surprised us, why an obvious approach does not work.
-
-<!--
-RULES
-
-1. UPDATE IN PLACE. Never append a second entry about a subject that already
-   has one. Appending is why memory files reach 90 KB and then stop being read
-   at all, which loses everything in them.
-
-2. FLAG CONTRADICTIONS, never silently overwrite. When a measurement changes,
-   say so and say which is current:
-
-     33 tok/s measured 2026-07-15. Re-measured 2026-07-26 at 41 tok/s after
-     the MLX switch; the earlier figure is superseded.
-
-3. ABSOLUTE DATES. Never "yesterday", never "recently", never "currently".
-
-4. DOES NOT BELONG HERE: anything the code already states, anything git already
-   records, anything that is a decision (that goes in docs/decisions/), anything
-   about work in progress (that goes in STATE.md).
-
-5. SPLIT AT ~20 KB. Past that, move to docs/memory/<topic>.md with an index.md
-   of one-line summaries and [[links]] between pages. Every page must be
-   reachable from the index, and the agent reads the index before drilling in.
--->
-
-_Nothing recorded yet._
+- `/` is a permanent authored visit-card front door. Its 3D tilt, grab-to-flip, cursor/pixel trail, dither swaps and one-screen simplicity are intentional product/design work, not legacy clutter.
+- The deeper publishing surface begins at `/home` and should not replace or flatten the front door.
+- The preferred publishing model is a quiet personal research journal: signal → write one Markdown post → optionally add one image → review → publish.
+- Text-only posts are first-class. Do not create visual work merely to satisfy a layout.
+- The journal should work for two reader depths: normal readers should understand the problem and why it matters; technical readers should get real methodology, evidence, caveats and terminology.
+- Publishing doctrine: public evidence of competence, private implementation advantage. Most proprietary technical posts should be disclosure Level 1 (concept) or Level 2 (method), not Level 3 (reproducible).
+- Publication safety rule: publish the question, evidence and lesson; keep the irreducible recipe private.
+- Potentially patentable ideas must be reviewed before public disclosure. Sensitive/private data, held-out evals, proprietary prompts/policies, exact moat-bearing thresholds and unreleased architecture are not public by default.

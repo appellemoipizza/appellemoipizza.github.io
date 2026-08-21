@@ -1,20 +1,8 @@
 # Thomas Vezzani — personal lab
 
-Thomas's interactive visit card is the public front door. Behind it is a static publishing system for software, AI systems, experiments, films and reusable resources.
+Personal publishing site for software, AI systems, experiments, films and reusable resources.
 
-The public site is an Astro static build. Git is the CMS: projects and notes are Markdown content collections; there is no database, account system or external CMS.
-
-## Public structure
-
-- `/` — the original interactive visit card: 3D tilt, grab-to-flip, cursor trail, dither swaps and personal identity
-- `/home` — publishing hub
-- `/work` — selected project case studies
-- `/notes` — essays, build notes and films
-- `/lab` — smaller experiments
-- `/resources` — reusable public assets when they earn their way there
-- `/about` — longer personal context
-
-The card is not a splash screen waiting to be replaced. It is the authored entry experience. The publishing system is deliberately layered behind it.
+The public site is an Astro static build. `/` is the authored interactive visit card; `/home` is a quiet research journal. Git is the CMS: projects and notes are Markdown content collections; there is no database, account system or external CMS.
 
 ## Run
 
@@ -31,26 +19,31 @@ npm run check
 
 `npm run check` runs Astro diagnostics and a full static build.
 
-## Publish content
+## Publish a post
 
-- selected work: `src/data/projects/*.md`
-- notes / essays / films / build logs: `src/data/notes/*.md`
-- keep unfinished writing as `draft: true`; draft entries are excluded from indexes, routes and RSS
-- publishing requires explicit human approval before changing a draft to public
+The intended workflow is deliberately small:
 
-See `EDITORIAL.md` for the Millie → signal → draft → review → publish contract.
+1. decide that something is worth documenting;
+2. add one Markdown file in `src/data/notes/`;
+3. optionally add one image under `public/` and set `image: /path/to/image`;
+4. keep `draft: true` while writing;
+5. run `npm run check`;
+6. publish only after explicit human approval by changing the draft to public.
+
+Required note fields are title, summary, date and kind. Tags are optional. Images are optional; text-only notes are first-class and should still look complete.
+
+See `EDITORIAL.md` for the Millie → signal → draft → review → publish contract and publication firewall. `docs/POST_TEMPLATE.md` is the internal drafting/checklist template for technical posts.
 
 ## Deployment
 
-`.github/workflows/deploy.yml` uses Astro's official GitHub Pages action when `main` changes, then verifies the real public homepage and writes a `pages/live-smoke` commit status.
+`.github/workflows/deploy.yml` uses Astro's official GitHub Pages action when `main` changes and records a live-site smoke status on the deployed commit.
 
 This repository uses the special `appellemoipizza.github.io` Pages URL, so Astro does not need a repository `base` path.
 
-The original root `index.html`, `style.css`, `script.js` and `assets/` remain as a preserved source/reference for the authored visit-card experience. The Astro implementation at `src/pages/index.astro` is the deployed version.
-
 ## Documentation
 
-- `EDITORIAL.md` — public content and Millie handoff
+- `EDITORIAL.md` — public content, Millie handoff and disclosure rules
+- `docs/POST_TEMPLATE.md` — safe technical-post drafting checklist
 - `INSTRUCTIONS.md` — how this repository is worked on
 - `AGENTS.md` — shared agent behavior
 - `ROADMAP.md` — what happens next

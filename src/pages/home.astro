@@ -1,59 +1,84 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import NoteRow from '../components/NoteRow.astro';
+import JournalLayout from '../layouts/JournalLayout.astro';
 
-const projects = (await getCollection('projects')).filter((p) => p.data.featured).sort((a,b) => a.data.order - b.data.order);
-const notes = (await getCollection('notes')).filter((n) => !n.data.draft).sort((a,b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 4);
+const notes = (await getCollection('notes'))
+  .filter((note) => !note.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = notes.find((note) => note.data.featured) ?? notes[0];
+const rest = notes.filter((note) => note.id !== featured?.id);
+const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const featuredImage = featured?.data.image ?? '/assets/dither-reflection.png';
 ---
-<BaseLayout>
-  <div class="shell">
-    <section class="hero">
-      <div class="hero-copy">
-        <div class="kicker">Independent software designer · AI systems builder</div>
-        <h1>I make software, AI systems, and small experiments.</h1>
-        <p class="hero-lede">I build around privacy, evidence, control, and the idea that useful software should know when to get out of the way.</p>
-        <div class="hero-bottom">
-          <div class="currently">
-            <div><span>NOW / 01</span>building Millie, my operating intelligence</div>
-            <div><span>NOW / 02</span>building Wakomi for life in Japan</div>
-            <div><span>NOW / 03</span>testing what local AI is actually good for</div>
-          </div>
-          <div class="meta">Brussels · mostly at night</div>
+<JournalLayout active="journal">
+  <header class="intro">
+    <div class="eyebrow">PERSONAL / RESEARCH JOURNAL</div>
+    <h1>A quiet place to document what I’m working on.</h1>
+    <p>Research, build logs, experiments, useful hacks and things I’m excited enough about to explain properly.</p>
+  </header>
+
+  {featured && (
+    <section aria-labelledby="latest-heading">
+      <div class="section-heading">
+        <span id="latest-heading">Latest note</span>
+        <a href="/notes">Full archive ↗</a>
+      </div>
+      <a class="featured-card" href={`/notes/${featured.id}`}>
+        <div class="featured-copy">
+          <div class="post-meta">{formatDate(featured.data.date)} · {featured.data.kind}</div>
+          <h2>{featured.data.title}</h2>
+          <p>{featured.data.summary}</p>
+          <span class="read">Read note ↗</span>
         </div>
-      </div>
-      <div class="hero-image">
-        <img src="/assets/dither-reflection.png" alt="Tokyo through a window with Thomas reflected in the glass" />
-      </div>
+        <div class="featured-image"><img src={featuredImage} alt="" /></div>
+      </a>
     </section>
+  )}
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Selected work</h2>
-        <a class="section-link" href="/work">all work ↗</a>
-      </div>
-      <div class="project-grid">
-        {projects.map((project) => <ProjectCard project={project} />)}
-      </div>
-    </section>
+  <section class="posts-section" aria-labelledby="recent-heading">
+    <div class="section-heading">
+      <span id="recent-heading">More from the notebook</span>
+      <span class="count">{String(rest.length).padStart(2, '0')}</span>
+    </div>
+    <div class="post-grid">
+      {rest.map((note) => (
+        <a class:list={['post-card', { 'has-image': Boolean(note.data.image) }]} href={`/notes/${note.id}`}>
+          {note.data.image && <div class="post-image"><img src={note.data.image} alt="" /></div>}
+          <div class="post-body">
+            <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
+            <h2>{note.data.title}</h2>
+            <p>{note.data.summary}</p>
+            <span class="read">Read ↗</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</JournalLayout>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Notes & films</h2>
-        <a class="section-link" href="/notes">archive ↗</a>
-      </div>
-      <div class="note-list">
-        {notes.map((note) => <NoteRow note={note} />)}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2>Small things count too</h2>
-        <a class="section-link" href="/lab">enter the lab ↗</a>
-      </div>
-      <div class="filter-note">The Lab is where quack, product films, knowledge tools, weird interface experiments and things that may never become companies are allowed to exist without pretending to be bigger than they are.</div>
-    </section>
-  </div>
-</BaseLayout>
+<style>
+  .intro { max-width: 880px; padding: 8px 0 58px; }
+  .intro h1 { margin: 15px 0 17px; max-width: 820px; font-size: clamp(46px, 6vw, 82px); line-height: .98; letter-spacing: -.055em; font-weight: 500; }
+  .intro p { max-width: 660px; margin: 0; font: 14px/1.65 var(--mono); color: var(--muted); }
+  .featured-card { display: grid; grid-template-columns: minmax(0,.95fr) minmax(320px,1.05fr); min-height: 440px; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; text-decoration: none; background: rgba(255,255,252,.78); }
+  .featured-copy { padding: clamp(28px,4vw,48px); display: flex; flex-direction: column; }
+  .featured-copy h2 { margin: 36px 0 15px; font-size: clamp(34px,4.6vw,62px); line-height: .98; letter-spacing: -.05em; font-weight: 500; }
+  .featured-copy p, .post-body p { margin: 0; font: 13px/1.65 var(--mono); color: #6e6e67; }
+  .featured-copy .read { margin-top: auto; padding-top: 34px; }
+  .featured-image, .post-image { overflow: hidden; background: #d7d6cf; }
+  .featured-image img, .post-image img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.04); transition: filter .28s ease, transform .55s ease; }
+  .featured-card:hover img, .post-card:hover img { filter: grayscale(.15) contrast(1.04); transform: scale(1.01); }
+  .featured-card:hover .read, .post-card:hover .read { color: var(--signal); }
+  .posts-section { margin-top: 48px; }
+  .post-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+  .post-card { min-height: 285px; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; text-decoration: none; background: rgba(255,255,252,.72); display: grid; }
+  .post-card.has-image { grid-template-rows: 165px 1fr; }
+  .post-image { border-bottom: 1px solid var(--line); }
+  .post-body { padding: 24px; display: flex; flex-direction: column; }
+  .post-body h2 { margin: 20px 0 11px; font-size: clamp(25px,2.8vw,37px); line-height: 1.02; letter-spacing: -.043em; font-weight: 500; }
+  .post-body p { font-size: 12px; }
+  .post-card .read { margin-top: auto; padding-top: 28px; }
+  .post-card:hover { border-color: #aaa79f; }
+  @media (max-width: 860px) { .featured-card { grid-template-columns: 1fr; } .featured-image { min-height: 310px; order: -1; } }
+  @media (max-width: 620px) { .intro h1 { font-size: clamp(42px,13vw,64px); } .post-grid { grid-template-columns: 1fr; } .featured-copy h2 { font-size: 40px; } }
+</style>
