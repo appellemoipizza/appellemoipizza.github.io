@@ -5,7 +5,6 @@ import JournalLayout from '../layouts/JournalLayout.astro';
 const notes = (await getCollection('notes'))
   .filter((note) => !note.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
 const featured = notes[0];
 const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
@@ -18,15 +17,9 @@ const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
       <p>A quiet record of the research, systems, experiments and useful things behind the work.</p>
       {featured && <a class="hero-action" href={`/notes/${featured.id}`}>Read latest note ↗</a>}
     </div>
-
     <a class="hero-visual" href={featured ? `/notes/${featured.id}` : '/home'} aria-label="Open latest journal note">
       <img src={heroImage} alt="" />
-      {featured && (
-        <div class="visual-caption">
-          <span>latest</span>
-          <strong>{featured.data.title}</strong>
-        </div>
-      )}
+      {featured && <div class="visual-caption"><span>latest</span><strong>{featured.data.title}</strong></div>}
     </a>
   </section>
 
@@ -36,16 +29,15 @@ const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
       <div class="notes-grid">
         {notes.map((note) => (
           <article class="note-card">
-            {note.data.image && (
-              <a class="note-image" href={`/notes/${note.id}`}>
-                <img src={note.data.image} alt="" />
-              </a>
-            )}
+            {note.data.image && <a class="note-image" href={`/notes/${note.id}`}><img src={note.data.image} alt="" /></a>}
             <div class="note-copy">
               <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
               <a class="note-title" href={`/notes/${note.id}`}><h2>{note.data.title}</h2></a>
               <p>{note.data.summary}</p>
-              <a class="read" href={`/notes/${note.id}`}>Read ↗</a>
+              <div class="card-foot">
+                <span>{note.data.tags.slice(0, 2).join(' · ')}</span>
+                <a class="read" href={`/notes/${note.id}`}>Read ↗</a>
+              </div>
             </div>
           </article>
         ))}
@@ -55,199 +47,28 @@ const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
 </JournalLayout>
 
 <style>
-  .hero-panel {
-    height: clamp(260px, 42vh, 330px);
-    min-height: 260px;
-    display: grid;
-    grid-template-columns: minmax(250px, .68fr) minmax(0, 1.32fr);
-    overflow: hidden;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,.95) inset,
-      0 -1px 0 rgba(35,36,35,.025) inset,
-      0 10px 26px rgba(35,36,35,.045);
-  }
-
-  .hero-copy {
-    padding: clamp(20px, 2.8vw, 30px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-right: 1px solid var(--line-soft);
-  }
-
-  .hero-copy h1 {
-    margin: 10px 0 9px;
-    font-size: clamp(24px, 2.6vw, 32px);
-    line-height: 1.01;
-    letter-spacing: -.04em;
-    font-weight: 560;
-  }
-
-  .hero-copy p {
-    max-width: 300px;
-    margin: 0;
-    color: var(--muted);
-    font-size: 10.5px;
-    line-height: 1.48;
-  }
-
-  .hero-action {
-    align-self: flex-start;
-    margin-top: 16px;
-    padding: 7px 10px;
-    border-radius: 5px;
-    background: #242522;
-    color: white;
-    font: 7px/1 var(--mono);
-    text-decoration: none;
-    box-shadow: 0 1px 0 rgba(255,255,255,.18) inset;
-  }
-
-  .hero-visual {
-    position: relative;
-    min-height: 0;
-    overflow: hidden;
-    text-decoration: none;
-    background: #e5e6e2;
-  }
-
-  .hero-visual img {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    object-fit: cover;
-    image-rendering: pixelated;
-    filter: grayscale(1) contrast(1.04);
-    transition: filter .25s ease, transform .5s ease;
-  }
-
-  .hero-visual:hover img {
-    filter: grayscale(.18) contrast(1.02);
-    transform: scale(1.008);
-  }
-
-  .visual-caption {
-    position: absolute;
-    right: 9px;
-    bottom: 9px;
-    max-width: min(230px, calc(100% - 18px));
-    padding: 8px 10px;
-    display: grid;
-    gap: 3px;
-    background: rgba(255,255,255,.94);
-    border: 1px solid rgba(35,36,35,.12);
-    border-radius: 6px;
-    box-shadow: 0 1px 0 rgba(255,255,255,.85) inset;
-    backdrop-filter: blur(8px);
-  }
-
-  .visual-caption span {
-    color: var(--muted);
-    font: 6px/1 var(--mono);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-
-  .visual-caption strong {
-    font-size: 9px;
-    line-height: 1.2;
-    font-weight: 560;
-  }
-
-  .notes-section { margin-top: 10px; }
-
-  .notes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .note-card {
-    height: clamp(150px, 21vh, 190px);
-    min-height: 150px;
-    overflow: hidden;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,.95) inset,
-      0 -1px 0 rgba(35,36,35,.025) inset,
-      0 7px 18px rgba(35,36,35,.035);
-  }
-
+  .hero-panel { height: clamp(340px, 48vh, 390px); min-height: 340px; display: grid; grid-template-columns: minmax(285px, .72fr) minmax(0, 1.28fr); overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 0 rgba(255,255,255,.95) inset, 0 -1px 0 rgba(35,36,35,.025) inset, 0 10px 26px rgba(35,36,35,.045); }
+  .hero-copy { padding: clamp(28px, 3.5vw, 40px); display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line-soft); }
+  .hero-copy h1 { margin: 14px 0 13px; font-size: clamp(30px, 3.25vw, 40px); line-height: 1; letter-spacing: -.043em; font-weight: 560; }
+  .hero-copy p { max-width: 310px; margin: 0; color: var(--muted); font-size: 11.5px; line-height: 1.58; }
+  .hero-action { align-self: flex-start; margin-top: 22px; padding: 8px 11px; border-radius: 5px; background: #242522; color: white; font: 8px/1 var(--mono); text-decoration: none; box-shadow: 0 1px 0 rgba(255,255,255,.18) inset; }
+  .hero-visual { position: relative; min-height: 0; overflow: hidden; text-decoration: none; background: #e5e6e2; }
+  .hero-visual img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.04); transition: filter .25s ease, transform .5s ease; }
+  .hero-visual:hover img { filter: grayscale(.18) contrast(1.02); transform: scale(1.008); }
+  .visual-caption { position: absolute; right: 12px; bottom: 12px; max-width: min(260px, calc(100% - 24px)); padding: 10px 12px; display: grid; gap: 4px; background: rgba(255,255,255,.94); border: 1px solid rgba(35,36,35,.12); border-radius: 6px; backdrop-filter: blur(8px); }
+  .visual-caption span { color: var(--muted); font: 7px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .visual-caption strong { font-size: 10px; line-height: 1.25; font-weight: 560; }
+  .notes-section { margin-top: 20px; }
+  .notes-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .note-card { min-height: 220px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 1px 0 rgba(255,255,255,.95) inset, 0 7px 18px rgba(35,36,35,.035); }
   .note-card:not(:has(.note-image)) { grid-template-rows: 1fr; }
-
-  .note-image {
-    display: block;
-    max-height: 64px;
-    overflow: hidden;
-    text-decoration: none;
-    border-bottom: 1px solid var(--line-soft);
-    background: #e6e7e3;
-  }
-
-  .note-image img {
-    width: 100%;
-    height: 64px;
-    object-fit: cover;
-    image-rendering: pixelated;
-    filter: grayscale(1) contrast(1.03);
-    transition: filter .22s ease;
-  }
-
-  .note-image:hover img { filter: grayscale(.18) contrast(1.02); }
-
-  .note-copy {
-    min-height: 0;
-    padding: 11px 12px;
-    display: flex;
-    flex-direction: column;
-  }
-
+  .note-image { display: block; max-height: 82px; overflow: hidden; text-decoration: none; border-bottom: 1px solid var(--line-soft); background: #e6e7e3; }
+  .note-image img { width: 100%; height: 82px; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.03); }
+  .note-copy { min-height: 0; padding: 15px 16px 14px; display: flex; flex-direction: column; }
   .note-title { text-decoration: none; }
-
-  .note-copy h2 {
-    margin: 7px 0 5px;
-    font-size: 13px;
-    line-height: 1.1;
-    letter-spacing: -.018em;
-    font-weight: 580;
-  }
-
-  .note-copy p {
-    margin: 0;
-    color: #74766f;
-    font-size: 8.8px;
-    line-height: 1.42;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .note-copy .read {
-    margin-top: auto;
-    padding-top: 8px;
-  }
-
-  @media (max-width: 980px) {
-    .hero-panel { height: 340px; grid-template-columns: minmax(250px, .82fr) minmax(0, 1.18fr); }
-    .notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .note-card { height: auto; min-height: 190px; }
-  }
-
-  @media (max-width: 720px) {
-    .hero-panel { grid-template-columns: 1fr; height: auto; min-height: 0; }
-    .hero-copy { border-right: 0; border-bottom: 1px solid var(--line-soft); padding: 28px 22px; }
-    .hero-copy h1 { font-size: 34px; }
-    .hero-visual, .hero-visual img { height: 260px; min-height: 260px; }
-    .notes-grid { grid-template-columns: 1fr; }
-    .note-card { height: auto; min-height: 210px; }
-    .note-image, .note-image img { max-height: none; height: auto; aspect-ratio: 16 / 8; }
-  }
+  .note-copy h2 { margin: 9px 0 7px; font-size: 15px; line-height: 1.14; letter-spacing: -.02em; font-weight: 580; }
+  .note-copy p { margin: 0; color: #74766f; font-size: 10px; line-height: 1.52; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-foot { margin-top: auto; padding-top: 18px; display: flex; align-items: end; justify-content: space-between; gap: 10px; color: #999a94; font: 7px/1.3 var(--mono); text-transform: uppercase; }
+  @media (max-width: 980px) { .hero-panel { height: 370px; grid-template-columns: minmax(270px, .82fr) minmax(0, 1.18fr); } .notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 720px) { .hero-panel { grid-template-columns: 1fr; height: auto; min-height: 0; } .hero-copy { border-right: 0; border-bottom: 1px solid var(--line-soft); padding: 30px 22px; } .hero-copy h1 { font-size: 34px; } .hero-visual, .hero-visual img { height: 260px; min-height: 260px; } .notes-grid { grid-template-columns: 1fr; } .note-card { min-height: 220px; } .note-image, .note-image img { max-height: none; height: auto; aspect-ratio: 16 / 8; } }
 </style>
