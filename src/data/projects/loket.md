@@ -1,7 +1,7 @@
 ---
 title: Loket
 eyebrow: B2B SaaS
-summary: Structured document collection for Belgian accountants and fiduciaries: request the right pieces, collect through a link without a client account, and stop chasing attachments manually.
+summary: "Structured document collection for Belgian accountants and fiduciaries: request the right pieces, collect through a link without a client account, and stop chasing attachments manually."
 status: live product
 role: founder / product / engineering
 year: 2026
