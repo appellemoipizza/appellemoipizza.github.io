@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import NoteRow from '../components/NoteRow.astro';
+
+const projects = (await getCollection('projects')).filter((p) => p.data.featured).sort((a,b) => a.data.order - b.data.order);
+const notes = (await getCollection('notes')).filter((n) => !n.data.draft).sort((a,b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 4);
+---
+<BaseLayout>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="kicker">Independent software designer · AI systems builder</div>
+        <h1>I make software, AI systems, and small experiments.</h1>
+        <p class="hero-lede">I build around privacy, evidence, control, and the idea that useful software should know when to get out of the way.</p>
+        <div class="hero-bottom">
+          <div class="currently">
+            <div><span>NOW / 01</span>building Millie, my operating intelligence</div>
+            <div><span>NOW / 02</span>building Wakomi for life in Japan</div>
+            <div><span>NOW / 03</span>testing what local AI is actually good for</div>
+          </div>
+          <div class="meta">Brussels · mostly at night</div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="/assets/dither-reflection.png" alt="Tokyo through a window with Thomas reflected in the glass" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <a class="section-link" href="/work">all work ↗</a>
+      </div>
+      <div class="project-grid">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Notes & films</h2>
+        <a class="section-link" href="/notes">archive ↗</a>
+      </div>
+      <div class="note-list">
+        {notes.map((note) => <NoteRow note={note} />)}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Small things count too</h2>
+        <a class="section-link" href="/lab">enter the lab ↗</a>
+      </div>
+      <div class="filter-note">The Lab is where quack, product films, knowledge tools, weird interface experiments and things that may never become companies are allowed to exist without pretending to be bigger than they are.</div>
+    </section>
+  </div>
+</BaseLayout>

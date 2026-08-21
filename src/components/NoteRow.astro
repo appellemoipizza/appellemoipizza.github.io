@@ -1,0 +1,9 @@
+---
+const { note } = Astro.props;
+const date = note.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+---
+<a class="note-row" href={`/notes/${note.id}`}>
+  <span class="meta">{date} · {note.data.kind}</span>
+  <span class="note-title">{note.data.title}</span>
+  <span class="note-arrow" aria-hidden="true">↗</span>
+</a>

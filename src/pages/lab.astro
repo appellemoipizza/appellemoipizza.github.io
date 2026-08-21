@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const things = [
+  ['quack', 'Anonymous album tier lists. No account, no backend, just a browser and an opinion.', 'music · tiny web app'],
+  ['loket-film', 'A 68-second product film written in React/Remotion so copy, motion and language can be regenerated instead of re-edited.', 'film · code'],
+  ['vault', 'A Markdown knowledge base maintained by an agent and read by humans, projects and motes.', 'knowledge · agents'],
+  ['prospect', 'A small B2B prospecting engine built around public Belgian company data, restraint and suppression rules.', 'operations · tooling'],
+  ['always late site', 'A deliberately quiet company site where removing animation was a design decision, not a missing feature.', 'web · identity'],
+  ['whatever is next', 'Experiments are allowed to stay experiments. They do not need a pitch deck to justify existing.', 'unknown · welcome']
+];
+---
+<BaseLayout title="Lab — Thomas Vezzani" description="Small software, films, tools and experiments by Thomas Vezzani.">
+  <div class="shell">
+    <header class="page-intro">
+      <div class="kicker">Lab</div>
+      <h1 class="page-title">Small software, weird interfaces, useful accidents.</h1>
+      <p>Not everything should become a startup. This is the shelf for experiments, internal tools, films, research interfaces and unfinished ideas that taught me something anyway.</p>
+    </header>
+    <div class="lab-grid">
+      {things.map(([title, body, meta]) => (
+        <article class="lab-card">
+          <div class="kicker">experiment</div>
+          <h3>{title}</h3>
+          <p>{body}</p>
+          <div class="meta">{meta}</div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

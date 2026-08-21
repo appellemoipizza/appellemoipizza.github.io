@@ -1,22 +1,26 @@
 # Roadmap
 
-Ordered. The top item is what is being worked on now. Move items to
-`CHANGELOG.md` by shipping them, not by editing this file.
+Ordered. The top item is what is being worked on now.
 
 ## Now
 
-- <FILL: the single thing being worked on, or "nothing yet">
+- Turn the next meaningful Millie/Wakomi/project milestone into a real note or vlog through the editorial-signal loop.
 
 ## Next
 
-- <FILL: or delete this section>
+- Verify the Astro GitHub Pages deployment and remove the legacy root-site fallback once Actions is confirmed as the Pages source.
+- Add video embeds only when the first real vlog exists; do not build a video CMS in advance.
+- Package the first reusable resource only after it has survived repeated internal use.
 
 ## Someday
 
-- <FILL: or delete this section>
+- Newsletter/email delivery if RSS and direct publishing produce enough recurring readers to justify it.
+- A small paid-resource shelf when there are genuinely reusable assets to sell.
 
 ## Explicitly not doing
 
-Things considered and rejected, so they do not get re-proposed every few months.
-
-- <FILL: or delete this section>
+- Generic developer portfolio with technology-skill bars.
+- Database/CMS/account system for publishing.
+- Automatic AI publishing.
+- Content quotas or an invented weekly posting schedule.
+- A storefront full of products that have not earned their way out of real work.
