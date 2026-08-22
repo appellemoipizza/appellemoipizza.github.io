@@ -11,6 +11,8 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 const date = note.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
 const author = 'Thomas V.';
+const wordCount = note.body?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+const readTime = Math.max(1, Math.round(wordCount / 200));
 ---
 <JournalLayout title={note.data.title} description={note.data.summary}>
   <article class="note">
@@ -28,6 +30,7 @@ const author = 'Thomas V.';
       <dl class="meta-grid">
         <div><dt>Written by</dt><dd>{author}</dd></div>
         <div><dt>Published</dt><dd>{date}</dd></div>
+        <div><dt>Read time</dt><dd>{readTime} min</dd></div>
         {note.data.project && <div><dt>Project</dt><dd>{note.data.project}</dd></div>}
       </dl>
 

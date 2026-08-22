@@ -7,6 +7,7 @@ const notes = (await getCollection('notes'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const featured = notes[0];
 const formatDate = (date: Date) => date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const readTime = (note: (typeof notes)[number]) => Math.max(1, Math.round((note.body?.trim().split(/\s+/).filter(Boolean).length ?? 0) / 200));
 const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
 ---
 <JournalLayout>
@@ -31,7 +32,7 @@ const heroImage = featured?.data.image ?? '/assets/dither-reflection.png';
           <article class="note-card">
             {note.data.image && <a class="note-image" href={`/notes/${note.id}`}><img src={note.data.image} alt="" /></a>}
             <div class="note-copy">
-              <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind}</div>
+              <div class="post-meta">{formatDate(note.data.date)} · {note.data.kind} · {readTime(note)} min read</div>
               <a class="note-title" href={`/notes/${note.id}`}><h2>{note.data.title}</h2></a>
               <p>{note.data.summary}</p>
               <div class="card-foot">
