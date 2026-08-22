@@ -15,7 +15,7 @@ const {
     <title>{title}</title>
     <script is:inline>
       try {
-        if (localStorage.getItem('journalSidebarCollapsed') === '1') {
+        if (localStorage.getItem('journalSidebarCollapsed') !== '0') {
           document.documentElement.classList.add('sidebar-collapsed');
         }
       } catch (e) {}
@@ -75,6 +75,19 @@ const {
     --line-soft: #ecece8;
     --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, monospace;
+
+    /* monochrome syntax theme: shade/weight instead of hue */
+    --astro-code-background: #eceae4;
+    --astro-code-foreground: #3a3b39;
+    --astro-code-token-keyword: #1c1d1b;
+    --astro-code-token-function: #1c1d1b;
+    --astro-code-token-string: #52544e;
+    --astro-code-token-string-expression: #52544e;
+    --astro-code-token-constant: #45463f;
+    --astro-code-token-parameter: #45463f;
+    --astro-code-token-punctuation: #9a9c94;
+    --astro-code-token-comment: #8a8c85;
+    --astro-code-token-link: #1c1d1b;
   }
   * { box-sizing: border-box; }
   @keyframes drift { from { background-position: 0 0, 0 0; } to { background-position: 140px 140px, 0 0; } }
@@ -87,7 +100,8 @@ const {
     -webkit-font-smoothing: antialiased;
     background-color: #E9EAE8;
     background-image: radial-gradient(circle, rgba(35,36,35,.11) 1px, transparent 1px), linear-gradient(180deg,#F7F8F6 0%,#E2E3E0 100%);
-    background-size: 7px 7px, 100% 100%;
+    background-size: 7px 7px, 100% 100vh;
+    background-repeat: repeat, no-repeat;
     animation: drift 18s linear infinite;
   }
   a { color: inherit; }
