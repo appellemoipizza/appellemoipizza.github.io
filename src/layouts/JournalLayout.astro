@@ -13,6 +13,9 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     <meta name="theme-color" content="#E9EAE8" />
     <meta name="description" content={description} />
     <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
     <title>{title}</title>
     <script is:inline>
       try {
@@ -24,6 +27,9 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
   </head>
   <body>
     <div class="controls" aria-label="Journal controls">
+      <a class="icon-btn" href="/" aria-label="Back to card" title="Back to card">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="5" cy="7" r="1.3" stroke="currentColor" stroke-width="1.1"/><line x1="8.5" y1="6.3" x2="12" y2="6.3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+      </a>
       <button class="icon-btn" id="sidebar-toggle" type="button" aria-label="Toggle sidebar" title="Toggle sidebar">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><line x1="6" y1="2.5" x2="6" y2="13.5" stroke="currentColor" stroke-width="1.3"/></svg>
       </button>
@@ -70,8 +76,14 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     --panel: #ffffff;
     --line: #dedfd9;
     --line-soft: #ecece8;
-    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-    --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, monospace;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, Menlo, monospace;
+    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+    /* type scale: two sizes for everything, headings on one fluid scale */
+    --fs-meta: 11px;
+    --fs-body: 17px;
+    --fs-h1: clamp(32px, 4.5vw, 48px);
+    --fs-h2: clamp(19px, 2vw, 24px);
 
     /* monochrome syntax theme: shade/weight instead of hue */
     --astro-code-background: #eceae4;
@@ -94,7 +106,7 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     overflow: hidden;
     padding: 10px;
     color: var(--ink);
-    font-family: var(--sans);
+    font-family: var(--serif);
     -webkit-font-smoothing: antialiased;
     background-color: #E9EAE8;
     background-image: radial-gradient(circle, rgba(35,36,35,.11) 1px, transparent 1px), linear-gradient(180deg,#F7F8F6 0%,#E2E3E0 100%);
@@ -139,18 +151,15 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     background: rgba(251,252,250,.98);
     overflow-y: auto;
   }
-  .rail-nav { margin-top: 50px; display: grid; gap: 15px; font-size: 9px; line-height: 1; }
-  .rail-nav a, .rail-nav span { text-decoration: none; color: #666861; }
+  .rail-nav { margin-top: 72px; display: grid; gap: 15px; font: var(--fs-meta) var(--mono); line-height: 1; }
+  .rail-nav a, .rail-nav span { text-decoration: none; color: var(--muted); }
   .rail-nav .active { color: var(--ink); }
   .rail-nav .active::before { content: "•"; margin-right: 8px; }
   .rail-bottom { margin-top: auto; }
 
   main { position: relative; min-width: 0; width: 100%; height: 100%; padding: 20px; background: #f8f8f5; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .eyebrow, .post-meta, .section-heading, .read { font-family: var(--mono); }
-  .eyebrow { color: var(--muted); font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
-  .section-heading { margin-bottom: 10px; color: #5f615c; font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
-  .post-meta { color: var(--muted); font-size: 8px; line-height: 1.4; letter-spacing: .05em; text-transform: uppercase; }
-  .read { color: #5f615c; font-size: 8px; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; }
+  .eyebrow, .post-meta, .section-heading, .read { font: var(--fs-meta) var(--mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  .read { text-decoration: none; }
   @media (prefers-reduced-motion: reduce) { body { animation: none; } }
   @media (max-width: 720px) {
     html, body { height: auto; }
