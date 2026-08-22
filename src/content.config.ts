@@ -11,7 +11,7 @@ const notes = defineCollection({
     kind: z.enum(['note', 'essay', 'film', 'log']),
     draft: z.boolean().default(false),
     featured: z.boolean().default(false),
-    author: z.string().default('ピザって呼んで'),
+    author: z.string().default('Thomas V.'),
     project: z.string().optional(),
     image: z.string().optional(),
     youtube: z.string().url().optional(),
