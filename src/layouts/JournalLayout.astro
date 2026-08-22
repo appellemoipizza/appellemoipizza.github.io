@@ -15,7 +15,7 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <title>{title}</title>
     <script is:inline>
       try {
@@ -40,7 +40,7 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
       )}
     </div>
     <div class="site-frame">
-      <aside class="journal-rail">
+      <aside class="journal-rail" style={`--nav-clear:${isArticle ? '72px' : '40px'}`}>
         <nav class="rail-nav" aria-label="Journal navigation">
           <a class="active" href="/home">Home</a>
         </nav>
@@ -76,8 +76,8 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     --panel: #ffffff;
     --line: #dedfd9;
     --line-soft: #ecece8;
-    --mono: 'IBM Plex Mono', 'SFMono-Regular', ui-monospace, Menlo, monospace;
-    --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+    --mono: 'Roboto Mono', 'SFMono-Regular', ui-monospace, Menlo, monospace;
+    --serif: 'Roboto', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
 
     /* type scale: two sizes for everything, headings on one fluid scale */
     --fs-meta: 11px;
@@ -151,7 +151,7 @@ const isArticle = Astro.url.pathname.startsWith('/notes/');
     background: rgba(251,252,250,.98);
     overflow-y: auto;
   }
-  .rail-nav { margin-top: 72px; display: grid; gap: 15px; font: var(--fs-meta) var(--mono); line-height: 1; }
+  .rail-nav { margin-top: var(--nav-clear, 40px); display: grid; gap: 15px; font: var(--fs-meta) var(--mono); line-height: 1; }
   .rail-nav a, .rail-nav span { text-decoration: none; color: var(--muted); }
   .rail-nav .active { color: var(--ink); }
   .rail-nav .active::before { content: "•"; margin-right: 8px; }
