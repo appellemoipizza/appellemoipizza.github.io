@@ -1,0 +1,32 @@
+---
+import { Content } from '../data/README.md';
+import JournalLayout from '../layouts/JournalLayout.astro';
+---
+<JournalLayout title="README.md - dithered" description="What this journal is, who writes it, and how it works.">
+  <article class="readme">
+    <div class="readme-prose"><Content /></div>
+  </article>
+</JournalLayout>
+
+<style>
+  .readme { max-width: 700px; margin: 0 auto; padding: 20px 18px 90px; }
+  .readme-prose { font-family: var(--serif); font-size: var(--fs-body); line-height: 1.7; }
+  .readme-prose :global(h1) { margin: 0 0 .5em; font-size: var(--fs-h1); line-height: 1.05; letter-spacing: -.02em; font-weight: 560; }
+  .readme-prose :global(h1 + p:not(:has(> strong:only-child))) { color: var(--muted); }
+  .readme-prose :global(h2) { margin: 1.8em 0 .5em; font-size: var(--fs-h2); line-height: 1.2; font-weight: 560; }
+  .readme-prose :global(p) { margin: 0 0 1.3em; }
+  /* Q&A: the question paragraph is bold-only, its answer follows indented under it */
+  .readme-prose :global(p:has(> strong:only-child)) { margin: 2em 0 .55em; font-size: var(--fs-h2); line-height: 1.35; font-weight: 560; }
+  .readme-prose :global(p:has(> strong:only-child) + p) { margin-left: 18px; padding-left: 14px; border-left: 1px solid var(--line); color: var(--muted); }
+  .readme-prose :global(strong) { font-weight: 620; }
+  .readme-prose :global(ul), .readme-prose :global(ol) { padding-left: 1.15em; }
+  .readme-prose :global(li) { margin: 0 0 .5em; }
+  .readme-prose :global(a) { text-underline-offset: 3px; }
+  .readme-prose :global(code) { padding: .12em .32em; background: var(--line-soft); font-family: var(--mono); font-size: .78em; }
+  .readme-prose :global(pre) { position: relative; margin: 1.8em 0; padding: 38px 18px 16px; overflow-x: auto; border: 1px solid #363636; border-radius: 6px; font-family: var(--mono); font-size: 13px; line-height: 1.65; }
+  .readme-prose :global(pre[data-language])::before { content: attr(data-language); position: absolute; top: 12px; left: 18px; color: #8f8f8f; font: var(--fs-meta) var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+  .readme-prose :global(pre code) { padding: 0; background: none; }
+  @media (max-width: 720px) {
+    .readme { padding: 12px 10px 64px; }
+  }
+</style>

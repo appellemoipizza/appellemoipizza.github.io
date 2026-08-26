@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from 'astro:content';
+import JournalLayout from '../../layouts/JournalLayout.astro';
+
+export async function getStaticPaths() {
+  const notes = (await getCollection('notes')).filter((note) => !note.data.draft);
+  return notes.map((note) => ({ params: { id: note.id }, props: { note } }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const date = note.data.date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const author = 'thomas vezzani';
+const wordCount = note.body?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+const readTime = Math.max(1, Math.round(wordCount / 200));
+---
+<JournalLayout title={note.data.title} description={note.data.summary}>
+  <article class="note">
+    {note.data.image && (
+      <div class="cover">
+        <img src={note.data.image} alt="" />
+      </div>
+    )}
+
+    <header class="article-header">
+      <h1>{note.data.title}</h1>
+      <p class="summary">{note.data.summary}</p>
+
+      <p class="meta-line">{date} · {readTime} min read · {author}{note.data.project && ` · ${note.data.project}`}</p>
+    </header>
+
+    <div class="prose"><Content /></div>
+  </article>
+</JournalLayout>
+
+<style>
+  .note { max-width: 700px; margin: 0 auto; padding: 20px 18px 90px; }
+
+  .cover { margin: 0 0 26px; background: var(--line-soft); }
+  .cover img { display: block; width: 100%; max-height: 360px; object-fit: cover; image-rendering: pixelated; filter: grayscale(1) contrast(1.05); }
+  :global(html[data-theme="dark"]) .cover img { filter: invert(1) contrast(1.08); }
+
+  h1 { margin: 0 0 15px; font-family: var(--serif); font-size: var(--fs-h1); line-height: 1.05; letter-spacing: -.02em; font-weight: 560; }
+  .summary { margin: 0; max-width: 600px; color: var(--muted); font-family: var(--serif); font-size: var(--fs-body); line-height: 1.5; }
+  .meta-line { margin: 20px 0 0; padding-top: 18px; max-width: 600px; border-top: 1px solid var(--line); color: var(--muted); font: var(--fs-meta) var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+
+  .prose { margin-top: 26px; font-family: var(--serif); font-size: var(--fs-body); line-height: 1.7; }
+  .prose :global(p) { margin: 0 0 1.3em; }
+  .prose :global(h2) { margin: 1em 0 .5em; font-family: var(--serif); font-size: var(--fs-h2); line-height: 1.2; font-weight: 560; }
+  .prose :global(h3) { margin: .9em 0 .4em; font-family: var(--serif); font-size: var(--fs-h2); line-height: 1.2; font-weight: 560; }
+  .prose :global(strong) { font-weight: 620; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.15em; }
+  .prose :global(li) { margin: 0 0 .5em; }
+  .prose :global(code) { padding: .12em .32em; background: var(--line-soft); font-family: var(--mono); font-size: .78em; }
+
+  /* code blocks: a distinct, clearly-bordered widget with a language + copy toolbar */
+  .prose :global(pre) { position: relative; margin: 1.8em 0; padding: 38px 18px 16px; overflow-x: auto; border: 1px solid #363636; border-radius: 6px; font-family: var(--mono); font-size: 13px; line-height: 1.65; }
+  .prose :global(pre[data-language])::before { content: attr(data-language); position: absolute; top: 12px; left: 18px; color: #8f8f8f; font: var(--fs-meta) var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+  .prose :global(pre code) { padding: 0; background: none; }
+  .prose :global(pre span[style*="token-comment"]) { font-style: italic; }
+
+  .prose :global(blockquote) { margin: 1.8em 0; padding: 3px 0 3px 20px; border-left: 2px solid var(--muted); color: var(--muted); font-family: var(--serif); font-size: var(--fs-body); line-height: 1.5; }
+  .prose :global(a) { text-underline-offset: 3px; }
+
+  .prose :global(table) { margin: 1.8em 0; width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12.5px; line-height: 1.4; }
+  .prose :global(th), .prose :global(td) { padding: 8px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+  .prose :global(th) { color: var(--muted); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; font-size: 10px; border-bottom: 1px solid var(--ink); }
+  .prose :global(td:not(:first-child)), .prose :global(th:not(:first-child)) { text-align: right; }
+
+  @media (max-width: 720px) {
+    .note { padding: 12px 10px 64px; }
+  }
+</style>

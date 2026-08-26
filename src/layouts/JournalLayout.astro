@@ -1,0 +1,305 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Research journal',
+  description = 'Research notes, build logs, experiments and useful things I am learning.'
+}: Props = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isHome = path === '/home';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/assets/og-card.png', Astro.site).href;
+const isNote = path.startsWith('/notes/');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#d4d8e0" />
+    <meta name="description" content={description} />
+    <link rel="alternate" type="application/rss+xml" title="Research journal" href="/rss.xml" />
+    <link rel="canonical" href={canonical} />
+    <title>{title}</title>
+
+    <meta property="og:type" content={isNote ? 'article' : 'website'} />
+    <meta property="og:site_name" content="dithered" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="dithered, a research blog" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('journalTheme');
+        document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div class="controls" aria-label="Journal controls">
+      <a class="icon-btn" href="/" aria-label="Back to card" title="Back to card">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="5" cy="7" r="1.3" stroke="currentColor" stroke-width="1.1"/><line x1="8.5" y1="6.3" x2="12" y2="6.3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><line x1="4" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+      </a>
+      <a class="icon-btn" href="/home" aria-label="Home" title="Home">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 7.5L8 2.5L14 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 6.5V13.5H12V6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle day/night mode" title="Toggle day/night mode">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5V3M8 13v1.5M14.5 8H13M3 8H1.5M12.5 3.5L11.4 4.6M4.6 11.4L3.5 12.5M12.5 12.5L11.4 11.4M4.6 4.6L3.5 3.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13.5 9.7A6 6 0 116.3 2.5a5 5 0 007.2 7.2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </button>
+      {!isHome && (
+        <a class="icon-btn" href="/home" aria-label="Back to articles" title="Back to articles">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M10.5 2.5L5 8L10.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      )}
+    </div>
+    <div class="site-frame">
+      <nav class="corner-nav" aria-label="Site pages">
+        <a href="/readme">README.md</a>
+      </nav>
+      <main>
+        <div class="main-content"><slot /></div>
+        <footer class="site-footer">&copy; 2026 always late</footer>
+      </main>
+    </div>
+    <script is:inline>
+      (function () {
+        var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
+        if (!fine) return;
+        var cv = document.createElement('canvas');
+        cv.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999';
+        document.body.appendChild(cv);
+        var ctx = cv.getContext('2d');
+        function resize() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        var parts = [], g = 6;
+        window.addEventListener('mousemove', function (e) {
+          parts.push({ x: e.clientX + (Math.random() * 10 - 5), y: e.clientY + (Math.random() * 10 - 5), life: 1 });
+          if (parts.length > 260) parts.splice(0, parts.length - 260);
+        });
+        function trailLoop() {
+          ctx.clearRect(0, 0, cv.width, cv.height);
+          for (var i = 0; i < parts.length; i++) {
+            var pt = parts[i];
+            pt.life -= .028;
+            if (pt.life <= 0) continue;
+            ctx.globalAlpha = Math.max(0, pt.life) * .8;
+            ctx.fillStyle = '#8f8f8f';
+            ctx.fillRect(Math.round(pt.x / g) * g, Math.round(pt.y / g) * g, g, g);
+          }
+          parts = parts.filter(function (pt) { return pt.life > 0; });
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(trailLoop);
+        }
+        requestAnimationFrame(trailLoop);
+      })();
+      (function () {
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+        toggle.addEventListener('click', function () {
+          var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          var next = isLight ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', next);
+          try { localStorage.setItem('journalTheme', next); } catch (e) {}
+        });
+      })();
+      (function () {
+        function fallbackCopy(text) {
+          var area = document.createElement('textarea');
+          area.value = text;
+          area.style.cssText = 'position:fixed;top:-1000px;left:-1000px;';
+          document.body.appendChild(area);
+          area.select();
+          var ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(area);
+          return ok;
+        }
+        var ICON_COPY = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 10.5H2.5A1 1 0 0 1 1.5 9.5V2.5A1 1 0 0 1 2.5 1.5H9.5A1 1 0 0 1 10.5 2.5V3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        var ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        document.querySelectorAll('main pre[data-language]').forEach(function (pre) {
+          var btn = document.createElement('button');
+          btn.className = 'code-copy-btn';
+          btn.type = 'button';
+          btn.setAttribute('aria-label', 'Copy code');
+          btn.title = 'Copy';
+          btn.innerHTML = ICON_COPY;
+          function flash(ok) {
+            btn.innerHTML = ok ? ICON_CHECK : '&times;';
+            btn.classList.add('copied');
+            setTimeout(function () {
+              btn.innerHTML = ICON_COPY;
+              btn.classList.remove('copied');
+            }, 1400);
+          }
+          btn.addEventListener('click', function () {
+            var code = pre.querySelector('code');
+            var text = code ? code.innerText : '';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(
+                function () { flash(true); },
+                function () { flash(fallbackCopy(text)); }
+              );
+            } else {
+              flash(fallbackCopy(text));
+            }
+          });
+          pre.appendChild(btn);
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --ink: #121212;
+    --muted: #666666;
+    --paper: #d4d8e0;
+    --panel: #fafafa;
+    --line: #acacac;
+    --line-soft: #d4d8e0;
+    --accent: #363636;
+    --mono: 'SFMono-Regular', 'SF Mono', ui-monospace, Menlo, monospace;
+    --serif: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+
+    /* type scale: two sizes for everything, headings on one fluid scale */
+    --fs-meta: 10px;
+    --fs-body: 14px;
+    --fs-h1: clamp(26px, 3.2vw, 36px);
+    --fs-h2: clamp(16px, 1.6vw, 19px);
+
+    /* industry-standard dark code theme: fixed regardless of day/night mode */
+    --astro-code-background: #1e1e1e;
+    --astro-code-foreground: #d4d4d4;
+    --astro-code-token-keyword: #569cd6;
+    --astro-code-token-function: #dcdcaa;
+    --astro-code-token-string: #ce9178;
+    --astro-code-token-string-expression: #ce9178;
+    --astro-code-token-constant: #b5cea8;
+    --astro-code-token-parameter: #9cdcfe;
+    --astro-code-token-punctuation: #d4d4d4;
+    --astro-code-token-comment: #6a9955;
+    --astro-code-token-link: #4fc1ff;
+  }
+  :root[data-theme="dark"] {
+    --ink: #fafafa;
+    --muted: #8f8f8f;
+    /* paper sits one step lighter than main so the frame/top strip separates from the article, like light mode */
+    --paper: #202020;
+    --panel: #202020;
+    --line: #666666;
+    --line-soft: #363636;
+    --accent: #acacac;
+  }
+  * { box-sizing: border-box; }
+  @keyframes drift { from { background-position: 0 0, 0 0; } to { background-position: 140px 140px, 0 0; } }
+  html, body { margin: 0; height: 100%; }
+  body {
+    height: 100vh;
+    overflow: hidden;
+    padding: 10px;
+    color: var(--ink);
+    font-family: var(--serif);
+    -webkit-font-smoothing: antialiased;
+    background-color: #d4d8e0;
+    background-image: radial-gradient(circle, rgba(54,54,54,.08) 1px, transparent 1px);
+    background-size: 7px 7px;
+    animation: drift 18s linear infinite;
+  }
+  :root[data-theme="dark"] body {
+    background-color: #121212;
+    background-image: radial-gradient(circle, rgba(250,250,250,.10) 1px, transparent 1px);
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  ::selection { background: rgba(172,172,172,.35); color: var(--ink); }
+
+  /* controls live outside the card, in the desk gutter, and never move */
+  .controls { position: fixed; top: 14px; left: 14px; z-index: 5; display: flex; flex-direction: column; gap: 6px; }
+  .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); color: var(--ink); cursor: pointer; flex: none; text-decoration: none; }
+  .icon-btn:hover { background: var(--line-soft); }
+  .corner-nav { position: absolute; top: 20px; right: 20px; z-index: 5; display: flex; gap: 10px; }
+  .corner-nav a { padding: 6px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); color: var(--ink); font: var(--fs-meta) var(--mono); letter-spacing: .06em; text-decoration: none; transition: all .2s ease; }
+  .corner-nav a:hover { background: var(--line-soft); }
+  #theme-toggle .icon-sun, #theme-toggle .icon-moon { display: none; }
+  html:not([data-theme="light"]) #theme-toggle .icon-sun { display: block; }
+  html[data-theme="light"] #theme-toggle .icon-moon { display: block; }
+
+  /* the journal is a fixed-size card: it never grows, the content inside main scrolls */
+  .site-frame {
+    position: relative;
+    width: min(1320px, 100%);
+    height: calc(100vh - 20px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    background: var(--paper);
+    border: 1px solid rgba(54,54,54,.22);
+    border-radius: 11px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 20px 50px rgba(0,0,0,.14);
+  }
+  :root[data-theme="dark"] .site-frame {
+    border-color: rgba(212,216,224,.18);
+    box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 18px 48px rgba(0,0,0,.5);
+  }
+
+  main { position: relative; min-width: 0; width: 100%; height: 100%; padding: 20px 20px 8px; background: #fafafa; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; }
+  /* pushes the footer to the very bottom of the frame even when the page is short */
+  .main-content { flex: 1 0 auto; }
+  .site-footer { flex: none; }
+  :root[data-theme="dark"] main { background: #121212; }
+
+  .eyebrow, .post-meta { font: var(--fs-meta) var(--mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  .site-footer { padding: 40px 0 4px; text-align: center; font: var(--fs-meta) var(--mono); color: var(--muted); letter-spacing: .06em; }
+  @media (prefers-reduced-motion: reduce) { body { animation: none; } }
+
+  /* code-block toolbar: fixed dark regardless of day/night mode, matches the fixed-dark code theme */
+  .code-copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #3a4048;
+    border-radius: 4px;
+    background: #262b33;
+    color: #9aa5ad;
+    font: 12px var(--mono);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .code-copy-btn:hover { background: #313742; color: #eaf3f9; border-color: #d4d8e0; }
+  .code-copy-btn.copied { color: #d4d8e0; border-color: #d4d8e0; }
+
+  /* keep the reading rail at narrower widths, with a smaller safe inset */
+  @media (max-width: 960px) {
+    .scroll-progress { left: 18px; width: 7px; height: min(240px, 38vh); min-height: 130px; }
+  }
+
+  @media (max-width: 720px) {
+    html, body { height: auto; }
+    body { padding: 0; overflow: visible; }
+    .site-frame { height: auto; min-height: 100vh; border-radius: 0; border-left: 0; border-right: 0; grid-template-columns: 1fr; }
+    main { height: auto; overflow-y: visible; padding: 12px 12px 6px; }
+    /* fixed chrome would otherwise overlap scrolled content on a naturally-flowing mobile page, scroll it away with the page instead */
+    .controls { position: absolute; flex-direction: row; }
+    .corner-nav { top: 14px; right: 14px; }
+    .site-frame { padding-top: 56px; }
+    .scroll-progress { left: 8px; width: 6px; height: 160px; min-height: 120px; }
+  }
+</style>

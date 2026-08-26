@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import JournalLayout from '../layouts/JournalLayout.astro';
+import NoteCard from '../components/NoteCard.astro';
+
+const notes = (await getCollection('notes'))
+  .filter((note) => !note.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<JournalLayout title="dithered - research blog">
+  <header class="masthead">
+    <img class="wordmark" src="/assets/dithered-wordmark-transparent.png" width="1144" height="312" alt="Dithered" />
+    <div class="social-row">
+      <a href="https://github.com/appellemoipizza" title="github"><img src="/assets/icon-github-ink.png" alt="github"></a>
+      <a href="https://www.linkedin.com/in/thomasv26" title="linkedin"><img src="/assets/icon-linkedin-ink.png" alt="linkedin"></a>
+      <a href="https://x.com/appellemoipizza" title="twitter"><img src="/assets/icon-twitter-ink.png" alt="twitter"></a>
+    </div>
+  </header>
+
+  {notes.length > 0 && (
+    <section class="notes-section" aria-labelledby="notes-heading">
+      <div class="section-heading" id="notes-heading">Articles</div>
+      <div class="notes-grid">
+        {notes.map((note) => <NoteCard note={note} />)}
+      </div>
+    </section>
+  )}
+</JournalLayout>
+
+<style>
+  .masthead { max-width: 760px; margin: 0 auto; padding: clamp(28px, 5vw, 58px) 20px clamp(28px, 4vw, 44px); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .wordmark { inline-size: min(100%, 360px); block-size: auto; aspect-ratio: 1144 / 312; object-fit: contain; object-position: center; filter: none; }
+  :global(html[data-theme="dark"]) .wordmark { filter: invert(1); }
+  .social-row { margin-top: 6px; display: flex; gap: 10px; }
+  .social-row a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--line); background: var(--panel); text-decoration: none; transition: all .2s ease; }
+  .social-row a:hover { background: var(--ink); border-color: var(--ink); }
+  .social-row img { width: 22px; height: 22px; object-fit: contain; image-rendering: pixelated; filter: none; transition: filter .2s ease; }
+  :global(html[data-theme="dark"]) .social-row img { filter: invert(1); }
+  .social-row a:hover img { filter: invert(1); }
+  :global(html[data-theme="dark"]) .social-row a:hover img { filter: none; }
+  .notes-section { max-width: 860px; margin: 0 auto; padding-bottom: 70px; }
+  .section-heading { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; font-family: var(--serif); font-size: 15px; font-weight: 560; letter-spacing: -.01em; text-transform: none; color: var(--ink); }
+  .section-heading::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, 560px); justify-content: start; gap: 16px; }
+  @media (max-width: 680px) {
+    .masthead { padding: 26px 12px 30px; }
+    .wordmark { inline-size: min(100%, 300px); }
+    .notes-section { padding-bottom: 48px; }
+    .notes-grid { grid-template-columns: minmax(0, 560px); justify-content: center; }
+  }
+</style>
