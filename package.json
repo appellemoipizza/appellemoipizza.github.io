@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "check": "astro check && astro build",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "og": "python3 scripts/generate-og.py"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",

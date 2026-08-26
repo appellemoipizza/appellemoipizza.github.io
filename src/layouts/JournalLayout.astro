@@ -2,15 +2,18 @@
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 const {
   title = 'Research journal',
-  description = 'Research notes, build logs, experiments and useful things I am learning.'
+  description = 'Research notes, build logs, experiments and useful things I am learning.',
+  ogImage: ogImageProp
 }: Props = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '');
 const isHome = path === '/home';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/assets/og-card.png', Astro.site).href;
+// articles pass their own generated card; everything else falls back to the blog one
+const ogImage = new URL(ogImageProp ?? '/assets/og-card.png', Astro.site).href;
 const isNote = path.startsWith('/notes/');
 ---
 <!doctype html>
@@ -32,7 +35,7 @@ const isNote = path.startsWith('/notes/');
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="dithered, a research blog" />
+    <meta property="og:image:alt" content={isNote ? title : 'dithered, a research blog'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

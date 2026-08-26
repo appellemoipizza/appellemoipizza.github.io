@@ -14,7 +14,7 @@ const author = 'thomas vezzani';
 const wordCount = note.body?.trim().split(/\s+/).filter(Boolean).length ?? 0;
 const readTime = Math.max(1, Math.round(wordCount / 200));
 ---
-<JournalLayout title={note.data.title} description={note.data.summary}>
+<JournalLayout title={note.data.title} description={note.data.summary} ogImage={`/assets/og/${note.id}.png`}>
   <article class="note">
     {note.data.image && (
       <div class="cover">
