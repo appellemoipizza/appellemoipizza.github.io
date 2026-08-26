@@ -11,7 +11,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 NOTES = ROOT / "src/data/notes"
@@ -19,11 +19,12 @@ ASSETS = ROOT / "public/assets"
 OUT = ASSETS / "og"
 
 W, H = 1200, 630
-BG = (18, 18, 18, 255)
-BORDER = (102, 102, 102, 255)
-INK = (250, 250, 250, 255)
-MUTED = (143, 139, 140, 255)
-SOFT = (54, 54, 54, 255)
+BG = (250, 250, 250, 255)
+BORDER = (172, 172, 172, 255)
+INK = (18, 18, 18, 255)
+MUTED = (102, 102, 102, 255)
+SOFT = (212, 216, 224, 255)
+DOT = (54, 54, 54, 26)
 
 BOLD = "/System/Library/Fonts/HelveticaNeue.ttc"
 MONO = "/System/Library/Fonts/Menlo.ttc"
@@ -38,13 +39,14 @@ def frame():
     d = ImageDraw.Draw(img)
     for y in range(0, H, 7):
         for x in range(0, W, 7):
-            d.point((x, y), fill=(212, 216, 224, 30))
+            d.point((x, y), fill=DOT)
     d.rectangle([CX0, CY0, CX1, CY1], fill=BG, outline=BORDER, width=1)
     return img, d
 
 
 def avatar(size):
-    av = ImageOps.invert(Image.open(ASSETS / "avatar-dither.png").convert("RGB"))
+    # dithered source is already dark-on-light, which suits the light card
+    av = Image.open(ASSETS / "avatar-dither.png").convert("RGB")
     return av.resize((size, size), Image.LANCZOS).convert("RGBA")
 
 
