@@ -16,7 +16,7 @@ The next assistant inherits the repository, but not necessarily the project.
 
 It can read the code. It may find a README. But it does not automatically know which statement is current, which decision was intentional, which idea was tried and abandoned, or whether the previous assistant was reporting a fact or repeating a guess.
 
-That is the small problem [`SAYONARA.md`](https://github.com/appellemoipizza/SAYONARA.md) is designed to address.
+That is the small problem [`SAYONARA.md`](https://github.com/thomasisalwayslate/SAYONARA.md) is designed to address.
 
 ## An ending, not a memory system
 
@@ -70,7 +70,7 @@ SAYONARA makes those distinctions explicit:
 
 The point is not bureaucratic labeling. It is to stop confidence from changing shape during a handoff.
 
-In use, from the [example handoff](https://github.com/appellemoipizza/SAYONARA.md/blob/main/examples/synthetic-brief.md):
+In use, from the [example handoff](https://github.com/thomasisalwayslate/SAYONARA.md/blob/main/examples/synthetic-brief.md):
 
 ```text
 No migrations tool. Schema changes so far have been manual ALTER TABLE
@@ -114,7 +114,7 @@ That keeps the file short enough to read in full and specific enough to matter.
 
 The most important constraint is scope.
 
-Writing [`SAYONARA.md`](https://github.com/appellemoipizza/SAYONARA.md) should not become an excuse for the outgoing agent to keep touching the project. The handoff can record an open follow-up, but it should not implement it. It can state the next action, but it does not authorize the recipient to begin it. It can describe a risk, but it should not pretend to resolve it.
+Writing [`SAYONARA.md`](https://github.com/thomasisalwayslate/SAYONARA.md) should not become an excuse for the outgoing agent to keep touching the project. The handoff can record an open follow-up, but it should not implement it. It can state the next action, but it does not authorize the recipient to begin it. It can describe a risk, but it should not pretend to resolve it.
 
 The recipient has its own job:
 
@@ -131,7 +131,7 @@ That separation matters. It gives the outgoing agent a clean exit and the incomi
 There is nothing to install. When a project genuinely moves to another assistant:
 
 1. Open a fresh conversation with the outgoing assistant, dedicated to the handoff and nothing else.
-2. Give it the [protocol](https://github.com/appellemoipizza/SAYONARA.md) and access to the project. It inspects, writes `SAYONARA.md`, and stops.
+2. Give it the [protocol](https://github.com/thomasisalwayslate/SAYONARA.md) and access to the project. It inspects, writes `SAYONARA.md`, and stops.
 3. Give the new assistant the file alongside the repository, as incoming evidence to re-verify.
 
 ## What SAYONARA does not claim

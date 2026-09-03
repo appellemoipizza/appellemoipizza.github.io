@@ -159,12 +159,12 @@ def parse_note(path):
 def main():
     print("standing cards:")
     compose(ASSETS / "og-card.png",
-            ident="appellemoipizza / dithered",
+            ident="thomasisalwayslate / dithered",
             title_img=ASSETS / "dithered-wordmark-transparent.png",
             desc="research notes, build logs, experiments",
-            meta="RSS  ·  github.com/appellemoipizza  ·  2026")
+            meta="RSS  ·  github.com/thomasisalwayslate  ·  2026")
     compose(ASSETS / "og-card-id.png",
-            ident="appellemoipizza",
+            ident="thomasisalwayslate",
             title_text="thomas",
             desc="27 · ai engineer and founder @alwayslate",
             meta="github  ·  linkedin  ·  twitter  ·  dithered")
@@ -183,7 +183,7 @@ def main():
         except ValueError:
             stamp = note["date"]
         compose(OUT / f"{note['id']}.png",
-                ident="appellemoipizza / dithered",
+                ident="thomasisalwayslate / dithered",
                 title_text=note["title"],
                 desc=note["summary"],
                 meta=f"{stamp}  ·  {note['read']} MIN READ  ·  THOMAS VEZZANI")

@@ -10,7 +10,7 @@ A: A small research journal about systems, experiments, and the reasoning behind
 
 **Q: How can I get an update when a new post comes out?**
 
-A: There is an [RSS feed](/rss.xml). I also post about new entries on [Twitter](https://x.com/appellemoipizza). No newsletter, no tracking, no popups.
+A: There is an [RSS feed](/rss.xml). I also post about new entries on [Twitter](https://x.com/thomasisalwayslate). No newsletter, no tracking, no popups.
 
 **Q: What tools do you use for the site?**
 
@@ -18,7 +18,7 @@ A: It is a static site built with Astro and deployed through GitHub Pages. Every
 
 **Q: What if I see something incorrect in a post?**
 
-A: Please tell me. Open an issue on [GitHub](https://github.com/appellemoipizza) or reach me on Twitter. Corrections are welcome and I would rather be right than look right.
+A: Please tell me. Open an issue on [GitHub](https://github.com/thomasisalwayslate) or reach me on Twitter. Corrections are welcome and I would rather be right than look right.
 
 **Q: Do you update your old posts?**
 
@@ -34,4 +34,4 @@ A: When there is something worth writing down. No schedule, because a schedule w
 
 **Q: Where is the source?**
 
-A: [github.com/appellemoipizza](https://github.com/appellemoipizza). The repository is public, this page included.
+A: [github.com/thomasisalwayslate](https://github.com/thomasisalwayslate). The repository is public, this page included.

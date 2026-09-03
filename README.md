@@ -1,4 +1,4 @@
-# appellemoipizza — personal lab
+# thomasisalwayslate — personal lab
 
 Personal site and research journal. `/` is the interactive visit card; `/home` is the journal.
 
